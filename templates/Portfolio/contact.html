@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} JM | Contact {% endblock %}
+
+{% block content %}
+    <div class="container" style="margin-bottom: 100px">
+        <div class="row">
+            <div class="col-11 col-sm-11 col-md-10 col-lg-9 col-xl-7" style="margin: auto; margin-top: 20px;">
+                <p style="text-align: center; font-weight: bold;">
+                    Have a project in mind or just want to say hello? I'd love to hear from you! Feel free to reach
+                    out using the contact form below or connect with me through my social media channels.
+                    Whether you're a fellow developer, a potential client, or someone with a shared passion for
+                    web development, I'm always open to collaboration and new opportunities.
+                </p>
+                <hr>
+                <form method="post" action="{% url 'core:contact' %}">
+                    {% csrf_token %}
+                    <div class="container-fluid">
+                        <div class="row" style="display: flex; align-items: center; justify-content: center;">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                <label for="first_name">First Name:</label>
+                                <input class="contact-input" type="text" id="first_name" name="first_name" style="width: 100%;" required>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                <label for="last_name">Last Name:</label>
+                                <input class="contact-input" type="text" id="last_name" name="last_name" style="width: 100%;" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="email">Email Address:</label>
+                                <input class="contact-input" type="email" id="email" name="email" style="width: 100%;" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="subject">Subject:</label>
+                                <input class="contact-input" type="text" id="subject" name="subject" style="width: 100%;" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="message" style="margin-top: 5px;">Message:</label>
+                                <textarea class="contact-input" id="message" name="message" style="width: 100%; max-width: 100%;" required></textarea>
+                            </div>
+                            <div class="col-12 d-flex" style="align-items: center; justify-content: center;">
+                                <button type="submit" style="width: auto; padding: 8px 30px; border: none; background: purple; border-radius: 2px; color: white;">Send</button>
+                            </div>
+                            <div id="response-message" style="display: none; margin-top: 15px;"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
