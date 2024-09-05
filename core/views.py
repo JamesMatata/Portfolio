@@ -1,12 +1,15 @@
 import json
+import os
+from wsgiref.util import FileWrapper
 
 import requests
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse, HttpResponse, HttpResponseNotFound, HttpResponseServerError
 from django.conf import settings
+from django.utils.http import http_date
 from django.views.decorators.csrf import csrf_exempt
 
-from core.models import Project
+from core.models import Project, Video
 
 
 def home(request):
@@ -23,12 +26,14 @@ def home(request):
 def portfolio(request):
     projects = Project.objects.all()
 
-    project_images = []
     for project in projects:
-        first_image = project.images.first()
-        project_images.append(first_image)
+        project.first_image = project.images.first()
+        try:
+            project.project_video = project.video
+        except Video.DoesNotExist:
+            project.project_video = None
 
-    return render(request, 'Portfolio/portfolio.html', {'projects': projects, 'project_images': project_images})
+    return render(request, 'Portfolio/portfolio.html', {'projects': projects})
 
 
 @csrf_exempt
@@ -65,3 +70,64 @@ def send_mailgun_email(subject, message, from_email, to_emails):
             "text": message,
         },
     )
+
+
+def serve_media(request, path):
+    try:
+        # Build the full path to the media file
+        media_path = os.path.join('media', path)
+        extension = os.path.splitext(media_path)[1].lower()
+
+        # Supported file extensions
+        video_extensions = ['.mp4', '.avi', '.mov']
+        audio_extensions = ['.wav', '.mp3']
+
+        # Determine the content type
+        if extension in video_extensions:
+            content_type = 'video/mp4'
+        elif extension in audio_extensions:
+            content_type = 'audio/mpeg'
+        else:
+            return HttpResponseNotFound('<h1>File type not supported</h1>')
+
+        # Get the file size
+        file_size = os.path.getsize(media_path)
+        file = open(media_path, 'rb')
+
+        # Handle range requests
+        content_range = request.headers.get('Range', None)
+        if content_range:
+            # Parse the range header
+            content_range = content_range.strip().split('=')[-1]
+            range_start, range_end = content_range.split('-')
+            range_start = int(range_start)
+            range_end = int(range_end) if range_end else file_size - 1
+            length = range_end - range_start + 1
+
+            # Set file pointer to the start of the requested range
+            file.seek(range_start)
+
+            # Create partial response
+            response = HttpResponse(
+                FileWrapper(file, length),
+                status=206,  # Partial Content status
+                content_type=content_type,
+            )
+            response['Content-Length'] = str(length)
+            response['Content-Range'] = f'bytes {range_start}-{range_end}/{file_size}'
+        else:
+            # Full content response
+            response = HttpResponse(
+                FileWrapper(file),
+                content_type=content_type,
+            )
+            response['Content-Length'] = str(file_size)
+
+        response['Accept-Ranges'] = 'bytes'
+        response['Last-Modified'] = http_date(os.path.getmtime(media_path))
+        return response
+
+    except FileNotFoundError:
+        return HttpResponseNotFound('<h1>File not found</h1>')
+    except Exception as e:
+        return HttpResponseServerError(f'<h1>Server error: {e}</h1>')

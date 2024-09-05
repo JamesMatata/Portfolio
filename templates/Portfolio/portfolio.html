@@ -9,23 +9,25 @@
         <div class="row">
             {% if projects %}
                 {% for project in projects %}
-                    <div
-                            class="col-11 col-sm-11 col-md-10 col-lg-9 col-xl-10"
-                            style="margin: 20px auto auto;"
-                    >
-                        <p style="text-align: right;margin: 0;">7th June 2023-7th July 2023</p>
+                    <div class="col-11 col-sm-11 col-md-10 col-lg-9 col-xl-10" style="margin: 20px auto auto;">
+                        <p style="text-align: right;margin: 0;">{{ project.start_date }}-{{ project.end_date }}</p>
                         <hr style="margin: 0 0 10px;">
                         <div class="my-project-div"
                              style="width: 100%;background: #fcf9fb;border: 1px solid #d9d9d9;padding: 2px;border-radius: 2px;">
-                            
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5"
                                          style="align-items: center;">
-                                        <div class="project-image-div"
-                                             style="background:
-                                                     {% with project.images.first as image %}{% if image %}url('{{ image.image.url }}'){% else %}white{% endif %}{% endwith %};background-size: cover;">
-                                            <a href=""
+                                        <div class="project-image-div" style="background:
+                                                {% with project.images.first as image %}
+                                                    {% if image %}
+                                                        url('{{ image.image.url }}')
+                                                    {% else %}
+                                                        white
+                                                    {% endif %}
+                                                {% endwith %}
+                                                ;background-size: cover;">
+                                            <a href="javascript:void(0);" onclick="openModal({{ project.id }})"
                                                style="display: flex;flex-direction: column;align-items: center;float: left;text-decoration: none;color: purple;margin: 5px;background-color: rgba(255, 255, 255, 0.3);padding: 5px;border: 1px solid #d9d9d9;border-radius: 2px;">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                      fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
@@ -34,16 +36,13 @@
                                                 </svg>
                                                 <p style="font-size: 8px;font-weight: bold;margin: 0;">Gallery</p>
                                             </a>
-
                                         </div>
-
                                     </div>
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-7">
-                                    <h3 class="project-name" style="font-size: 20px;margin: 0">{{ project.title }}</h3>
+                                        <h3 class="project-name"
+                                            style="font-size: 20px;margin: 0">{{ project.title }}</h3>
                                         <hr style="margin: 0;">
-                                        <p class="project-description">
-                                            {{ project.description }}
-                                        </p>
+                                        <p class="project-description">{{ project.description }}</p>
                                         <p style="text-align: center; margin: 0;">
                                             {% for item in project.tools_and_languages|split_tools_and_languages %}
                                                 <span class="tools-used-in-project">{{ item }}</span>
@@ -53,34 +52,358 @@
                                             <a href="{{ project.live_preview_link }}"
                                                style="font-size: 14px;margin: 0 5px;">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                     fill="black" class="bi bi-link-45deg" viewBox="0 0 16 16">
-                                                    <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z"></path>
-                                                    <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"></path>
+                                                     fill="black"
+                                                     class="bi bi-link-45deg" viewBox="0 0 16 16">
+                                                    <path
+                                                            d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z">
+                                                    </path>
+                                                    <path
+                                                            d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z">
+                                                    </path>
                                                 </svg>
                                                 Live Preview
                                             </a>
                                             <a href="{{ project.github_link }}" style="font-size: 14px;margin: 0 5px;">
                                                 View Code
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20"
-                                                     fill="black" class="bi bi-github" viewBox="0 0 16 16">
-                                                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"></path>
+                                                     fill="black"
+                                                     class="bi bi-github" viewBox="0 0 16 16">
+                                                    <path
+                                                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8">
+                                                    </path>
                                                 </svg>
                                             </a>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
+                    <div id="modal-{{ project.id }}" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal({{ project.id }})">&times;</span>
+                            <h2>{{ project.title }}</h2>
+                            <hr>
+                            <div class="modal-gallery">
+                                <div class="row">
+                                    <script>
+                                        window['mediaItems_{{ project.id }}'] = [];
+                                    </script>
+
+                                    {% with 0 as media_index %}
+                                        <!-- Video Section -->
+{% if project.project_video %}
+    <div class="col-12">
+        <video controls data-index="{{ media_index }}"
+               onclick="openDetailModal({{ project.id }}, this.getAttribute('data-index'), 'video')">
+            <source src="{% url 'core:serve_media' path=project.project_video.video.name %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <script>
+            window['mediaItems_{{ project.id }}'].push({
+                url: "{% url 'core:serve_media' path=project.project_video.video.name %}",
+                type: "video"
+            });
+        </script>
+    </div>
+    {% with media_index|add:"1" as media_index %}
+    {% endwith %}
+{% endif %}
+
+                                        <!-- Images Section -->
+{% for image in project.images.all %}
+    <div class="col-12 col-sm-10 col-md-6 col-lg-6 col-xl-6 horizontal-image"
+         data-index="{{ media_index }}"
+         onclick="openDetailModal({{ project.id }}, this.getAttribute('data-index'), 'image')">
+        <img src="{{ image.image.url }}" alt="{{ image.reference }}"
+             style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+    <script>
+        window['mediaItems_{{ project.id }}'].push({
+            url: "{{ image.image.url }}",
+            type: "image"
+        });
+    </script>
+    {% with media_index|add:"1" as media_index %}
+    {% endwith %}
+{% endfor %}
+
+                                    {% endwith %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed View Modal with Carousel Controls -->
+                    <div id="detail-modal" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeDetailModal()">&times;</span>
+                            <div class="carousel-container">
+                                <button class="carousel-button left"
+                                        onclick="previousMedia(window['mediaItems_{{ project.id }}'])">&#10094;
+                                </button>
+                                <div id="detail-content" class="carousel-content">
+                                    <!-- Content will be dynamically inserted here -->
+                                </div>
+                                <button class="carousel-button right"
+                                        onclick="nextMedia(window['mediaItems_{{ project.id }}'])">&#10095;
+                                </button>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
             {% else %}
-                <p style="font-size: 20px;font-weight: bold;text-align: center;margin-top: 30px;">There is no Projects
-                    Yet</p>
+                <p style="font-size: 20px;font-weight: bold;text-align: center;margin-top: 30px;">There are no projects
+                    yet</p>
             {% endif %}
-
-
         </div>
     </div>
+
+    <!-- Modal Styling -->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-image {
+            max-width: 100px;
+            height: auto;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Carousel Container */
+        .carousel-container {
+            position: relative;
+            max-width: 100%;
+            margin: auto;
+        }
+
+        /* Carousel Buttons */
+        .carousel-button {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .carousel-button.left {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .carousel-button.right {
+            right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Carousel Content */
+        .carousel-content {
+            text-align: center;
+        }
+    </style>
+
+    <script>
+    let currentMediaIndex = 0;
+
+    // Function to open the project modal
+    function openModal(projectId) {
+        console.log("Opening modal for project:", projectId);
+        document.getElementById('modal-' + projectId).style.display = "block";
+    }
+
+    // Function to close the project modal
+    function closeModal(projectId) {
+        console.log("Closing modal for project:", projectId);
+        document.getElementById('modal-' + projectId).style.display = "none";
+    }
+
+    // Close modal if the user clicks outside of it
+    window.onclick = function (event) {
+        const modals = document.getElementsByClassName('modal');
+        for (let i = 0; i < modals.length; i++) {
+            if (event.target === modals[i]) {
+                console.log("Click outside modal detected, closing modal.");
+                modals[i].style.display = "none";
+            }
+        }
+    };
+
+    // Function to open the detailed modal with the media carousel
+    function openDetailModal(projectId, index, mediaType) {
+    // Parse the index properly to ensure it's a number
+    index = parseInt(index, 10);
+
+    // Retrieve the media items array for the project
+    const mediaItems = window['mediaItems_' + projectId];
+
+    // Ensure index is valid and within range
+    if (index >= 0 && index < mediaItems.length) {
+        // Only adjust the index if the media type is "image"
+        if (mediaType === 'image') {
+            index += 1; 
+        }
+
+        console.log("Opening detail modal for project:", projectId, "at index:", index);
+        
+        // Set the current media index to the clicked item
+        currentMediaIndex = index;
+        console.log("Current media index set to:", currentMediaIndex);
+
+        // Update the modal content based on the current media item
+        updateCarouselContent(mediaItems);
+
+        // Show the detail modal
+        document.getElementById('detail-modal').style.display = 'block';
+    } else {
+        console.log("Invalid index:", index, "for project:", projectId);
+    }
+}
+
+
+    // Function to close the detailed media modal
+    function closeDetailModal() {
+        console.log("Closing detail modal");
+        document.getElementById('detail-modal').style.display = 'none';
+    }
+
+    // Function to update the carousel content
+    function updateCarouselContent(mediaItems) {
+        console.log("Updating carousel content. Current media index:", currentMediaIndex);
+
+        const detailContent = document.getElementById('detail-content');
+        detailContent.innerHTML = ''; // Clear previous content
+
+        const mediaItem = mediaItems[currentMediaIndex];
+        console.log("Displaying media item:", mediaItem);
+
+        // Check if the current media item is a video or an image and create the appropriate element
+        if (mediaItem.type === 'video') {
+            const videoElement = document.createElement('video');
+            videoElement.setAttribute('controls', 'controls');
+            videoElement.style.width = '100%';
+
+            const sourceElement = document.createElement('source');
+            sourceElement.setAttribute('src', mediaItem.url);
+            sourceElement.setAttribute('type', 'video/mp4');
+
+            videoElement.appendChild(sourceElement);
+            detailContent.appendChild(videoElement);
+        } else if (mediaItem.type === 'image') {
+            const imageElement = document.createElement('img');
+            imageElement.setAttribute('src', mediaItem.url);
+            imageElement.style.width = '100%';
+            detailContent.appendChild(imageElement);
+        }
+
+        // Update the state of the carousel buttons
+        updateButtonStates(mediaItems);
+    }
+
+    // Function to navigate to the previous media item in the carousel
+    function previousMedia(mediaItems) {
+        if (currentMediaIndex > 0) {
+            currentMediaIndex--;
+            console.log("Previous media selected. New index:", currentMediaIndex);
+            updateCarouselContent(mediaItems);
+        } else {
+            console.log("Already at the first media item. Cannot go back further.");
+        }
+    }
+
+    // Function to navigate to the next media item in the carousel
+    function nextMedia(mediaItems) {
+        if (currentMediaIndex < mediaItems.length - 1) {
+            currentMediaIndex++;
+            console.log("Next media selected. New index:", currentMediaIndex);
+            updateCarouselContent(mediaItems);
+        } else {
+            console.log("Already at the last media item. Cannot go forward.");
+        }
+    }
+
+    // Function to update the state of the carousel navigation buttons
+    function updateButtonStates(mediaItems) {
+        const prevButton = document.querySelector('.carousel-button.left');
+        const nextButton = document.querySelector('.carousel-button.right');
+
+        console.log("Updating button states. Current index:", currentMediaIndex);
+
+        // Disable the "Previous" button if we're at the first item
+        if (currentMediaIndex === 0) {
+            prevButton.disabled = true;
+            prevButton.style.opacity = 0.5;
+            console.log("Previous button disabled.");
+        } else {
+            prevButton.disabled = false;
+            prevButton.style.opacity = 1;
+            console.log("Previous button enabled.");
+        }
+
+        // Disable the "Next" button if we're at the last item
+        if (currentMediaIndex === mediaItems.length - 1) {
+            nextButton.disabled = true;
+            nextButton.style.opacity = 0.5;
+            console.log("Next button disabled.");
+        } else {
+            nextButton.disabled = false;
+            nextButton.style.opacity = 1;
+            console.log("Next button enabled.");
+        }
+    }
+</script>
+
 {% endblock %}
