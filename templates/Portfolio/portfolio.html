@@ -114,7 +114,7 @@
                                         <!-- Images Section -->
 {% for image in project.images.all %}
     <div class="col-12 col-sm-10 col-md-6 col-lg-6 col-xl-6 horizontal-image"
-         data-index="{{ media_index }}"
+         data-index="{{ forloop.counter0 }}"
          onclick="openDetailModal({{ project.id }}, this.getAttribute('data-index'), 'image')">
         <img src="{{ image.image.url }}" alt="{{ image.reference }}"
              style="width: 100%; height: 100%; object-fit: cover;">
@@ -125,8 +125,6 @@
             type: "image"
         });
     </script>
-    {% with media_index|add:"1" as media_index %}
-    {% endwith %}
 {% endfor %}
 
                                     {% endwith %}
@@ -283,22 +281,24 @@
     };
 
     // Function to open the detailed modal with the media carousel
-    function openDetailModal(projectId, index, mediaType) {
-    // Parse the index properly to ensure it's a number
+    // Function to open the detailed modal with the media carousel
+// Function to open the detailed modal with the media carousel
+function openDetailModal(projectId, index, mediaType) {
+    // Parse the index to ensure it's a number
     index = parseInt(index, 10);
 
     // Retrieve the media items array for the project
     const mediaItems = window['mediaItems_' + projectId];
 
-    // Ensure index is valid and within range
+    // Ensure the index is valid and within range
     if (index >= 0 && index < mediaItems.length) {
-        // Only adjust the index if the media type is "image"
+        console.log("Opening detail modal for project:", projectId, "at index:", index);
+
+        // Adjust the index based on the media type
         if (mediaType === 'image') {
-            index += 1; 
+            index += 1; // Add 1 to the index if it's an image
         }
 
-        console.log("Opening detail modal for project:", projectId, "at index:", index);
-        
         // Set the current media index to the clicked item
         currentMediaIndex = index;
         console.log("Current media index set to:", currentMediaIndex);
@@ -312,6 +312,7 @@
         console.log("Invalid index:", index, "for project:", projectId);
     }
 }
+
 
 
     // Function to close the detailed media modal
