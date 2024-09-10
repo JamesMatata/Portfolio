@@ -6,77 +6,85 @@
 
 {% block content %}
     <style>
-        .modalDialog::backdrop {
-            background: #CCCCCC;
-            opacity: 1;
-        }
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none; /* Initially hidden */
+        justify-content: center;
+        align-items: center;
+    }
 
-        .modalDialog {
-            border: none;
-            border-radius: 8px;
-            background-color: white;
-            padding: 2px;
-            width: 70vw;
-            height: 100vh;
-        }
+    .modal-content {
+        background-color: white;
+        border-radius: 8px;
+        width: 70vw;
+        height: 90vh;
+        padding: 20px;
+        overflow-y: auto;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-        .modal-header {
-            width: 100%;
-            border: none;
-            background: #e4e4e4;
-            padding: 5px;
-            border-radius: 5px 5px 0 0;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .modal-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #e4e4e4;
+        padding: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 5px 5px 0 0;
+    }
 
-        .modal-header svg {
-            width: 30px;
-            height: 30px;
-            fill: black;
-        }
+    .modal-header svg {
+        width: 30px;
+        height: 30px;
+        fill: black;
+        cursor: pointer;
+    }
 
-        .carousel-controls {
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
+    .carousel-controls {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-50%);
+    }
 
-        .carousel-button {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            padding: 16px;
-            margin-top: -22px;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.6s ease;
-            user-select: none;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
+    .carousel-button {
+        cursor: pointer;
+        padding: 16px;
+        color: white;
+        font-weight: bold;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: none;
+    }
 
-        .carousel-button.left {
-            left: 0;
-            border-radius: 3px 0 0 3px;
-        }
+    .carousel-button.left {
+        position: absolute;
+        left: 0;
+    }
 
-        .carousel-button.right {
-            right: 0;
-            border-radius: 0 3px 3px 0;
-        }
+    .carousel-button.right {
+        position: absolute;
+        right: 0;
+    }
 
-        .carousel-button:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-    </style>
-
+    .carousel-button:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+</style>
 
 
     <div class="container" style="margin-bottom: 500px">
@@ -91,19 +99,19 @@
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5">
-                                        <div class="project-image-div" style="background:
-                                                {% with project.images.first as image %}
-                                                    {% if image %}
-                                                        url('{{ image.image.url }}')
-                                                    {% else %}
-                                                        white
-                                                    {% endif %}
-                                                {% endwith %}
-                                                ;background-size: cover;">
+                                        <div class="project-image-div" 
+                                             style="background: 
+                                                 {% with project.images.first as image %}
+                                                     {% if image %}
+                                                         url('{{ image.image.url }}')
+                                                     {% else %}
+                                                         white
+                                                     {% endif %}
+                                                 {% endwith %}
+                                                 ;background-size: cover;">
                                             <a href="javascript:void(0);"
                                                onclick="openGalleryModal({{ project.id }}, '{{ project.title }}', {{ project.media|safe }})"
                                                style="display: flex;flex-direction: column;align-items: center;text-decoration: none;color: purple;margin: 5px;background-color: rgba(255, 255, 255, 0.3);padding: 5px;border: 1px solid #d9d9d9;border-radius: 2px;">
-
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                      fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
                                                     <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"></path>
@@ -156,178 +164,108 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <p style="font-size: 20px;font-weight: bold;text-align: center;margin-top: 30px;">There are no projects
-                    yet</p>
+                <p style="font-size: 20px;font-weight: bold;text-align: center;margin-top: 30px;">There are no projects yet</p>
             {% endif %}
         </div>
     </div>
 
-    <dialog class="modalDialog" id="gallery-modal" style="display: flex;flex-direction: column">
-        <div class="modal-header">
-            <h3 id="modal-title"></h3>
-            <svg xmlns="http://www.w3.org/2000/svg" onclick="closeGalleryModal()" class="bi bi-x-square"
-                 viewBox="0 0 16 16">
-                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
-                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
-            </svg>
-        </div>
-        <div class="modal-gallery" style="flex: 1;overflow-y: scroll;overflow-x: hidden">
-            <div class="row" id="gallery-content">
-                <!-- Media content (images, videos) will be inserted dynamically -->
+    <!-- Gallery Modal -->
+    <div class="modal-overlay" id="gallery-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title"></h3>
+                <svg xmlns="http://www.w3.org/2000/svg" onclick="closeGalleryModal()" class="bi bi-x-square"
+                     viewBox="0 0 16 16">
+                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
+                </svg>
             </div>
+            <div id="gallery-content" style="display: flex; flex-wrap: wrap;"></div>
         </div>
-    </dialog>
+    </div>
 
-    <dialog class="modalDialog" id="detail-modal">
-        <div class="modal-header">
-            <h2 id="modal-title"></h2>
-            <svg xmlns="http://www.w3.org/2000/svg" onclick="closeDetailModal()" class="bi bi-x-square"
-                 viewBox="0 0 16 16">
-                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
-                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
-            </svg>
-        </div>
-        <div class="carousel-controls" style="flex: 1;height: auto">
-            <button class="carousel-button left" onclick="previousMedia()">
-                &#10094;
-            </button>
-            <div id="detail-content" class="carousel-content" style="height: 100%;margin: auto;overflow: clip">
-                <!-- Content will be dynamically inserted here -->
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <svg xmlns="http://www.w3.org/2000/svg" onclick="closeDetailModal()" class="bi bi-x-square"
+                     viewBox="0 0 16 16">
+                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
+                </svg>
             </div>
-            <button class="carousel-button right" onclick="nextMedia()">
-                &#10095;
-            </button>
+            <div id="detail-content" style="display: flex; justify-content: center; align-items: center;"></div>
+            <div class="carousel-controls">
+                <button class="carousel-button left" onclick="previousMedia()">&#10094;</button>
+                <button class="carousel-button right" onclick="nextMedia()">&#10095;</button>
+            </div>
         </div>
-    </dialog>
+    </div>
 
     <script>
-        window.onload = function () {
-            const galleryModal = document.getElementById('gallery-modal');
-            const detailModal = document.getElementById('detail-modal');
-
-            // Ensure both modals are closed on page load
-            if (galleryModal.open) {
-                galleryModal.close();
-            }
-            if (detailModal.open) {
-                detailModal.close();
-            }
-        };
-
         let currentMediaIndex = 0;
         let mediaItems = [];
 
-        // Function to open the gallery modal with project-specific media
         function openGalleryModal(projectId, projectTitle, media) {
             document.getElementById('modal-title').textContent = projectTitle;
 
-            // Check if media exists and is an array
             if (!media || !Array.isArray(media) || media.length === 0) {
-                console.warn(`No media found for project ID: ${projectId}`);
                 alert('No media available for this project.');
                 return;
             }
 
-            // Insert media into the gallery
+            mediaItems = media;
             const galleryContent = document.getElementById('gallery-content');
-            galleryContent.innerHTML = ''; // Clear previous content
+            galleryContent.innerHTML = '';
 
-            mediaItems = media; // Store media items globally for the carousel
-            mediaItems.forEach((item, index) => {
-                const mediaDiv = document.createElement('div');
-                mediaDiv.className = 'col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6';
-                mediaDiv.style.margin = 'auto';
+            media.forEach((item, index) => {
                 const mediaElement = document.createElement(item.type === 'image' ? 'img' : 'video');
                 mediaElement.src = item.url;
-                mediaElement.className = 'gallery-item';
                 mediaElement.style.width = '100%';
-                mediaElement.style.height = '100%';
                 mediaElement.style.maxHeight = '60vh';
                 mediaElement.style.objectFit = 'contain';
                 mediaElement.setAttribute('data-index', index);
-                mediaElement.onclick = () => openDetailModal(index); // Open detail view on click
+                mediaElement.onclick = () => openDetailModal(index);
                 if (item.type === 'video') {
                     mediaElement.controls = true;
                 }
-                mediaDiv.appendChild(mediaElement);
-                galleryContent.appendChild(mediaDiv);
+                galleryContent.appendChild(mediaElement);
             });
 
-            // Explicitly open the gallery modal
-            document.getElementById('gallery-modal').showModal();
+            document.getElementById('gallery-modal').style.display = 'flex';
         }
 
-        // Function to close the gallery modal
         function closeGalleryModal() {
-            const galleryModal = document.getElementById('gallery-modal');
-            if (galleryModal.open) {
-                galleryModal.close();
-            }
+            document.getElementById('gallery-modal').style.display = 'none';
         }
 
-        // Function to open the detail modal (carousel) at a specific index
         function openDetailModal(index) {
             currentMediaIndex = index;
             updateDetailModal();
-
-            // Hide the gallery modal
             closeGalleryModal();
-
-            // Explicitly open the detail modal
-            document.getElementById('detail-modal').showModal();
+            document.getElementById('detail-modal').style.display = 'flex';
         }
 
-        // Function to close the detail modal
         function closeDetailModal() {
-            const detailModal = document.getElementById('detail-modal');
-            if (detailModal.open) {
-                detailModal.close();
-            }
+            document.getElementById('detail-modal').style.display = 'none';
         }
 
-        // Function to update the carousel content in the detail modal
         function updateDetailModal() {
             const detailContent = document.getElementById('detail-content');
-            detailContent.innerHTML = ''; // Clear previous content
-
+            detailContent.innerHTML = '';
             const mediaItem = mediaItems[currentMediaIndex];
             const mediaElement = document.createElement(mediaItem.type === 'image' ? 'img' : 'video');
             mediaElement.src = mediaItem.url;
             mediaElement.style.width = '100%';
-            mediaElement.style.height = '100%';
             mediaElement.style.objectFit = 'contain';
             if (mediaItem.type === 'video') {
                 mediaElement.controls = true;
             }
             detailContent.appendChild(mediaElement);
-
-            // Update the state of the previous and next buttons
             updateButtonStates();
         }
 
-        // Function to disable or enable the previous/next buttons based on the current index
-        function updateButtonStates() {
-            const prevButton = document.querySelector('.carousel-button.left');
-            const nextButton = document.querySelector('.carousel-button.right');
-
-            if (currentMediaIndex === 0) {
-                prevButton.disabled = true;
-                prevButton.style.opacity = 0.5;
-            } else {
-                prevButton.disabled = false;
-                prevButton.style.opacity = 1;
-            }
-
-            if (currentMediaIndex === mediaItems.length - 1) {
-                nextButton.disabled = true;
-                nextButton.style.opacity = 0.5;
-            } else {
-                nextButton.disabled = false;
-                nextButton.style.opacity = 1;
-            }
-        }
-
-        // Navigate to the previous media in the carousel
         function previousMedia() {
             if (currentMediaIndex > 0) {
                 currentMediaIndex--;
@@ -335,12 +273,16 @@
             }
         }
 
-        // Navigate to the next media in the carousel
         function nextMedia() {
             if (currentMediaIndex < mediaItems.length - 1) {
                 currentMediaIndex++;
                 updateDetailModal();
             }
+        }
+
+        function updateButtonStates() {
+            document.querySelector('.carousel-button.left').disabled = currentMediaIndex === 0;
+            document.querySelector('.carousel-button.right').disabled = currentMediaIndex === mediaItems.length - 1;
         }
     </script>
 
