@@ -5,6 +5,116 @@
 {% block title %} JM | Portfolio {% endblock %}
 
 {% block content %}
+    <style>
+        .modalDialog::backdrop {
+            background: #CCCCCC;
+            opacity: 1;
+        }
+
+        .modalDialog {
+            border: none;
+            border-radius: 8px;
+            background-color: white;
+            padding: 2px;
+            width: 70vw;
+            height: 100vh;
+        }
+
+        .modal-header {
+            width: 100%;
+            border: none;
+            background: #e4e4e4;
+            padding: 5px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header svg {
+            width: 30px;
+            height: 30px;
+            fill: black;
+        }
+
+        .carousel-controls {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .carousel-button {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            user-select: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .carousel-button.left {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .carousel-button.right {
+            right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+
+    <dialog class="modalDialog" id="gallery-modal" style="display: flex;flex-direction: column">
+        <div class="modal-header">
+            <h3 id="modal-title"></h3>
+            <svg xmlns="http://www.w3.org/2000/svg" onclick="closeGalleryModal()" class="bi bi-x-square"
+                 viewBox="0 0 16 16">
+                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
+            </svg>
+        </div>
+        <div class="modal-gallery" style="flex: 1;overflow-y: scroll;overflow-x: hidden">
+            <div class="row" id="gallery-content">
+                <!-- Media content (images, videos) will be inserted dynamically -->
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class="modalDialog" id="detail-modal">
+        <div class="modal-header">
+            <h2 id="modal-title"></h2>
+            <svg xmlns="http://www.w3.org/2000/svg" onclick="closeDetailModal()" class="bi bi-x-square"
+                 viewBox="0 0 16 16">
+                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
+            </svg>
+        </div>
+        <div class="carousel-controls" style="flex: 1;height: auto">
+            <button class="carousel-button left" onclick="previousMedia()">
+                &#10094;
+            </button>
+            <div id="detail-content" class="carousel-content" style="height: 100%;margin: auto;overflow: clip">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+            <button class="carousel-button right" onclick="nextMedia()">
+                &#10095;
+            </button>
+        </div>
+    </dialog>
+
     <div class="container" style="margin-bottom: 500px">
         <div class="row">
             {% if projects %}
@@ -16,8 +126,7 @@
                              style="width: 100%;background: #fcf9fb;border: 1px solid #d9d9d9;padding: 2px;border-radius: 2px;">
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5"
-                                         style="align-items: center;">
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5">
                                         <div class="project-image-div" style="background:
                                                 {% with project.images.first as image %}
                                                     {% if image %}
@@ -27,8 +136,9 @@
                                                     {% endif %}
                                                 {% endwith %}
                                                 ;background-size: cover;">
-                                            <a href="javascript:void(0);" onclick="openModal({{ project.id }})"
-                                               style="display: flex;flex-direction: column;align-items: center;float: left;text-decoration: none;color: purple;margin: 5px;background-color: rgba(255, 255, 255, 0.3);padding: 5px;border: 1px solid #d9d9d9;border-radius: 2px;">
+                                            <a href="javascript:void(0);"
+                                               onclick="openGalleryModal({{ project.id }}, '{{ project.title }}', {{ project.media|safe }})"
+                                               style="display: flex;flex-direction: column;align-items: center;text-decoration: none;color: purple;margin: 5px;background-color: rgba(255, 255, 255, 0.3);padding: 5px;border: 1px solid #d9d9d9;border-radius: 2px;">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                      fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
                                                     <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"></path>
@@ -79,77 +189,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div id="modal-{{ project.id }}" class="modal">
-                        <div class="modal-content">
-                            <span class="close" onclick="closeModal({{ project.id }})">&times;</span>
-                            <h2>{{ project.title }}</h2>
-                            <hr>
-                            <div class="modal-gallery">
-                                <div class="row">
-                                    <script>
-                                        window['mediaItems_{{ project.id }}'] = [];
-                                    </script>
-
-                                    {% with 0 as media_index %}
-                                        <!-- Video Section -->
-{% if project.project_video %}
-    <div class="col-12">
-        <video controls data-index="{{ media_index }}"
-               onclick="openDetailModal({{ project.id }}, this.getAttribute('data-index'), 'video')">
-            <source src="{% url 'core:serve_media' path=project.project_video.video.name %}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <script>
-            window['mediaItems_{{ project.id }}'].push({
-                url: "{% url 'core:serve_media' path=project.project_video.video.name %}",
-                type: "video"
-            });
-        </script>
-    </div>
-    {% with media_index|add:"1" as media_index %}
-    {% endwith %}
-{% endif %}
-
-                                        <!-- Images Section -->
-{% for image in project.images.all %}
-    <div class="col-12 col-sm-10 col-md-6 col-lg-6 col-xl-6 horizontal-image"
-         data-index="{{ forloop.counter0 }}"
-         onclick="openDetailModal({{ project.id }}, this.getAttribute('data-index'), 'image')">
-        <img src="{{ image.image.url }}" alt="{{ image.reference }}"
-             style="width: 100%; height: 100%; object-fit: cover;">
-    </div>
-    <script>
-        window['mediaItems_{{ project.id }}'].push({
-            url: "{{ image.image.url }}",
-            type: "image"
-        });
-    </script>
-{% endfor %}
-
-                                    {% endwith %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Detailed View Modal with Carousel Controls -->
-                    <div id="detail-modal" class="modal">
-                        <div class="modal-content">
-                            <span class="close" onclick="closeDetailModal()">&times;</span>
-                            <div class="carousel-container">
-                                <button class="carousel-button left"
-                                        onclick="previousMedia(window['mediaItems_{{ project.id }}'])">&#10094;
-                                </button>
-                                <div id="detail-content" class="carousel-content">
-                                    <!-- Content will be dynamically inserted here -->
-                                </div>
-                                <button class="carousel-button right"
-                                        onclick="nextMedia(window['mediaItems_{{ project.id }}'])">&#10095;
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 {% endfor %}
             {% else %}
                 <p style="font-size: 20px;font-weight: bold;text-align: center;margin-top: 30px;">There are no projects
@@ -158,253 +197,148 @@
         </div>
     </div>
 
-    <!-- Modal Styling -->
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            padding-top: 60px;
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            position: relative;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .modal-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .modal-image {
-            max-width: 100px;
-            height: auto;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        /* Carousel Container */
-        .carousel-container {
-            position: relative;
-            max-width: 100%;
-            margin: auto;
-        }
-
-        /* Carousel Buttons */
-        .carousel-button {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            padding: 16px;
-            margin-top: -22px;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.6s ease;
-            border-radius: 0 3px 3px 0;
-            user-select: none;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .carousel-button.left {
-            left: 0;
-            border-radius: 3px 0 0 3px;
-        }
-
-        .carousel-button.right {
-            right: 0;
-            border-radius: 0 3px 3px 0;
-        }
-
-        .carousel-button:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        /* Carousel Content */
-        .carousel-content {
-            text-align: center;
-        }
-    </style>
-
     <script>
-    let currentMediaIndex = 0;
+        window.onload = function () {
+            const galleryModal = document.getElementById('gallery-modal');
+            const detailModal = document.getElementById('detail-modal');
 
-    // Function to open the project modal
-    function openModal(projectId) {
-        console.log("Opening modal for project:", projectId);
-        document.getElementById('modal-' + projectId).style.display = "block";
-    }
+            // Ensure both modals are closed on page load
+            if (galleryModal.open) {
+                galleryModal.close();
+            }
+            if (detailModal.open) {
+                detailModal.close();
+            }
+        };
 
-    // Function to close the project modal
-    function closeModal(projectId) {
-        console.log("Closing modal for project:", projectId);
-        document.getElementById('modal-' + projectId).style.display = "none";
-    }
+        let currentMediaIndex = 0;
+        let mediaItems = [];
 
-    // Close modal if the user clicks outside of it
-    window.onclick = function (event) {
-        const modals = document.getElementsByClassName('modal');
-        for (let i = 0; i < modals.length; i++) {
-            if (event.target === modals[i]) {
-                console.log("Click outside modal detected, closing modal.");
-                modals[i].style.display = "none";
+        // Function to open the gallery modal with project-specific media
+        function openGalleryModal(projectId, projectTitle, media) {
+            document.getElementById('modal-title').textContent = projectTitle;
+
+            // Check if media exists and is an array
+            if (!media || !Array.isArray(media) || media.length === 0) {
+                console.warn(`No media found for project ID: ${projectId}`);
+                alert('No media available for this project.');
+                return;
+            }
+
+            // Insert media into the gallery
+            const galleryContent = document.getElementById('gallery-content');
+            galleryContent.innerHTML = ''; // Clear previous content
+
+            mediaItems = media; // Store media items globally for the carousel
+            mediaItems.forEach((item, index) => {
+                const mediaDiv = document.createElement('div');
+                mediaDiv.className = 'col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6';
+                mediaDiv.style.margin = 'auto';
+                const mediaElement = document.createElement(item.type === 'image' ? 'img' : 'video');
+                mediaElement.src = item.url;
+                mediaElement.className = 'gallery-item';
+                mediaElement.style.width = '100%';
+                mediaElement.style.height = '100%';
+                mediaElement.style.maxHeight = '60vh';
+                mediaElement.style.objectFit = 'contain';
+                mediaElement.setAttribute('data-index', index);
+                mediaElement.onclick = () => openDetailModal(index); // Open detail view on click
+                if (item.type === 'video') {
+                    mediaElement.controls = true;
+                }
+                mediaDiv.appendChild(mediaElement);
+                galleryContent.appendChild(mediaDiv);
+            });
+
+            // Explicitly open the gallery modal
+            document.getElementById('gallery-modal').showModal();
+        }
+
+        // Function to close the gallery modal
+        function closeGalleryModal() {
+            const galleryModal = document.getElementById('gallery-modal');
+            if (galleryModal.open) {
+                galleryModal.close();
             }
         }
-    };
 
-    // Function to open the detailed modal with the media carousel
-    // Function to open the detailed modal with the media carousel
-// Function to open the detailed modal with the media carousel
-function openDetailModal(projectId, index, mediaType) {
-    // Parse the index to ensure it's a number
-    index = parseInt(index, 10);
+        // Function to open the detail modal (carousel) at a specific index
+        function openDetailModal(index) {
+            currentMediaIndex = index;
+            updateDetailModal();
 
-    // Retrieve the media items array for the project
-    const mediaItems = window['mediaItems_' + projectId];
+            // Hide the gallery modal
+            closeGalleryModal();
 
-    // Ensure the index is valid and within range
-    if (index >= 0 && index < mediaItems.length) {
-        console.log("Opening detail modal for project:", projectId, "at index:", index);
-
-        // Adjust the index based on the media type
-        if (mediaType === 'image') {
-            index += 1; // Add 1 to the index if it's an image
+            // Explicitly open the detail modal
+            document.getElementById('detail-modal').showModal();
         }
 
-        // Set the current media index to the clicked item
-        currentMediaIndex = index;
-        console.log("Current media index set to:", currentMediaIndex);
-
-        // Update the modal content based on the current media item
-        updateCarouselContent(mediaItems);
-
-        // Show the detail modal
-        document.getElementById('detail-modal').style.display = 'block';
-    } else {
-        console.log("Invalid index:", index, "for project:", projectId);
-    }
-}
-
-
-
-    // Function to close the detailed media modal
-    function closeDetailModal() {
-        console.log("Closing detail modal");
-        document.getElementById('detail-modal').style.display = 'none';
-    }
-
-    // Function to update the carousel content
-    function updateCarouselContent(mediaItems) {
-        console.log("Updating carousel content. Current media index:", currentMediaIndex);
-
-        const detailContent = document.getElementById('detail-content');
-        detailContent.innerHTML = ''; // Clear previous content
-
-        const mediaItem = mediaItems[currentMediaIndex];
-        console.log("Displaying media item:", mediaItem);
-
-        // Check if the current media item is a video or an image and create the appropriate element
-        if (mediaItem.type === 'video') {
-            const videoElement = document.createElement('video');
-            videoElement.setAttribute('controls', 'controls');
-            videoElement.style.width = '100%';
-
-            const sourceElement = document.createElement('source');
-            sourceElement.setAttribute('src', mediaItem.url);
-            sourceElement.setAttribute('type', 'video/mp4');
-
-            videoElement.appendChild(sourceElement);
-            detailContent.appendChild(videoElement);
-        } else if (mediaItem.type === 'image') {
-            const imageElement = document.createElement('img');
-            imageElement.setAttribute('src', mediaItem.url);
-            imageElement.style.width = '100%';
-            detailContent.appendChild(imageElement);
+        // Function to close the detail modal
+        function closeDetailModal() {
+            const detailModal = document.getElementById('detail-modal');
+            if (detailModal.open) {
+                detailModal.close();
+            }
         }
 
-        // Update the state of the carousel buttons
-        updateButtonStates(mediaItems);
-    }
+        // Function to update the carousel content in the detail modal
+        function updateDetailModal() {
+            const detailContent = document.getElementById('detail-content');
+            detailContent.innerHTML = ''; // Clear previous content
 
-    // Function to navigate to the previous media item in the carousel
-    function previousMedia(mediaItems) {
-        if (currentMediaIndex > 0) {
-            currentMediaIndex--;
-            console.log("Previous media selected. New index:", currentMediaIndex);
-            updateCarouselContent(mediaItems);
-        } else {
-            console.log("Already at the first media item. Cannot go back further.");
-        }
-    }
+            const mediaItem = mediaItems[currentMediaIndex];
+            const mediaElement = document.createElement(mediaItem.type === 'image' ? 'img' : 'video');
+            mediaElement.src = mediaItem.url;
+            mediaElement.style.width = '100%';
+            mediaElement.style.height = '100%';
+            mediaElement.style.objectFit = 'contain';
+            if (mediaItem.type === 'video') {
+                mediaElement.controls = true;
+            }
+            detailContent.appendChild(mediaElement);
 
-    // Function to navigate to the next media item in the carousel
-    function nextMedia(mediaItems) {
-        if (currentMediaIndex < mediaItems.length - 1) {
-            currentMediaIndex++;
-            console.log("Next media selected. New index:", currentMediaIndex);
-            updateCarouselContent(mediaItems);
-        } else {
-            console.log("Already at the last media item. Cannot go forward.");
-        }
-    }
-
-    // Function to update the state of the carousel navigation buttons
-    function updateButtonStates(mediaItems) {
-        const prevButton = document.querySelector('.carousel-button.left');
-        const nextButton = document.querySelector('.carousel-button.right');
-
-        console.log("Updating button states. Current index:", currentMediaIndex);
-
-        // Disable the "Previous" button if we're at the first item
-        if (currentMediaIndex === 0) {
-            prevButton.disabled = true;
-            prevButton.style.opacity = 0.5;
-            console.log("Previous button disabled.");
-        } else {
-            prevButton.disabled = false;
-            prevButton.style.opacity = 1;
-            console.log("Previous button enabled.");
+            // Update the state of the previous and next buttons
+            updateButtonStates();
         }
 
-        // Disable the "Next" button if we're at the last item
-        if (currentMediaIndex === mediaItems.length - 1) {
-            nextButton.disabled = true;
-            nextButton.style.opacity = 0.5;
-            console.log("Next button disabled.");
-        } else {
-            nextButton.disabled = false;
-            nextButton.style.opacity = 1;
-            console.log("Next button enabled.");
+        // Function to disable or enable the previous/next buttons based on the current index
+        function updateButtonStates() {
+            const prevButton = document.querySelector('.carousel-button.left');
+            const nextButton = document.querySelector('.carousel-button.right');
+
+            if (currentMediaIndex === 0) {
+                prevButton.disabled = true;
+                prevButton.style.opacity = 0.5;
+            } else {
+                prevButton.disabled = false;
+                prevButton.style.opacity = 1;
+            }
+
+            if (currentMediaIndex === mediaItems.length - 1) {
+                nextButton.disabled = true;
+                nextButton.style.opacity = 0.5;
+            } else {
+                nextButton.disabled = false;
+                nextButton.style.opacity = 1;
+            }
         }
-    }
-</script>
+
+        // Navigate to the previous media in the carousel
+        function previousMedia() {
+            if (currentMediaIndex > 0) {
+                currentMediaIndex--;
+                updateDetailModal();
+            }
+        }
+
+        // Navigate to the next media in the carousel
+        function nextMedia() {
+            if (currentMediaIndex < mediaItems.length - 1) {
+                currentMediaIndex++;
+                updateDetailModal();
+            }
+        }
+    </script>
 
 {% endblock %}
