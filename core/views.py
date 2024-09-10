@@ -27,11 +27,27 @@ def portfolio(request):
     projects = Project.objects.all()
 
     for project in projects:
+        # Fetch the first image and video for the project
         project.first_image = project.images.first()
         try:
             project.project_video = project.video
         except Video.DoesNotExist:
             project.project_video = None
+
+        # Prepare media data for frontend consumption
+        project.media = []
+        for image in project.images.all():
+            project.media.append({
+                'type': 'image',
+                'url': image.image.url,
+                'reference': image.reference
+            })
+        if project.project_video:
+            project.media.append({
+                'type': 'video',
+                'url': project.project_video.video.url,
+                'reference': 'video'
+            })
 
     return render(request, 'Portfolio/portfolio.html', {'projects': projects})
 
