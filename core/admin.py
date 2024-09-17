@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Project, Image, Video
+from .models import Project, Image, Video, BookCall, HireMe
+from .utils import send_hire_me_email, send_book_call_email
 
 
 class ImageInline(admin.TabularInline):
@@ -32,3 +33,33 @@ class ImageAdmin(admin.ModelAdmin):
 class VideoAdmin(admin.ModelAdmin):
     list_display = ('project', 'video', 'uploaded_at')
     search_fields = ('project__title',)
+
+
+@admin.register(HireMe)
+class HireMeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'is_confirmed', 'created_at')
+    list_filter = ('is_confirmed', 'created_at')
+    search_fields = ('name', 'email', 'project_details')
+
+    # Override the save_model method
+    def save_model(self, request, obj, form, change):
+        # Check if the object is confirmed and hasn't been confirmed before
+        if change and obj.is_confirmed and not HireMe.objects.get(pk=obj.pk).is_confirmed:
+            # Send the confirmation email
+            send_hire_me_email(obj)
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(BookCall)
+class BookCallAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'preferred_date', 'preferred_time', 'is_confirmed')
+    list_filter = ('is_confirmed', 'preferred_date')
+    search_fields = ('name', 'email')
+
+    # Override the save_model method
+    def save_model(self, request, obj, form, change):
+        # Check if the object is confirmed and hasn't been confirmed before
+        if change and obj.is_confirmed and not BookCall.objects.get(pk=obj.pk).is_confirmed:
+            # Send the confirmation email
+            send_book_call_email(obj)
+        super().save_model(request, obj, form, change)

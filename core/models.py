@@ -33,3 +33,27 @@ class Video(models.Model):
 
     def __str__(self):
         return f"Video for project: {self.project.title}"
+
+
+class BookCall(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    preferred_date = models.DateField()
+    preferred_time = models.TimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_confirmed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.name} - {self.preferred_date} at {self.preferred_time}"
+
+
+class HireMe(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    project_details = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_confirmed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.name} - {self.email}"

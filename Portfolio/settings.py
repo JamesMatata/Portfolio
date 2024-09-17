@@ -130,5 +130,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MAILGUN_API_KEY = 'a8cedc4b80a3c5a1dd3d522fabc5fbc4-6fafb9bf-95748789'
-MAILGUN_DOMAIN_NAME = ' sandboxef1df7a625014395a8f6e86a09408af3.mailgun.org'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.elasticemail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jamesmatatamule@gmail.com'
+EMAIL_HOST_PASSWORD = 'D85C08D0F492D47F5CA9E1DD8743038AED0E'
+DEFAULT_FROM_EMAIL = 'jamesmatatamule@gmail.com'

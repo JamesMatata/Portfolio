@@ -5,88 +5,6 @@
 {% block title %} JM | Portfolio {% endblock %}
 
 {% block content %}
-    <style>
-    /* Modal Styles */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        display: none; /* Initially hidden */
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-content {
-        background-color: white;
-        border-radius: 8px;
-        width: 70vw;
-        height: 90vh;
-        padding: 20px;
-        overflow-y: auto;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: #e4e4e4;
-        padding: 5px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-radius: 5px 5px 0 0;
-    }
-
-    .modal-header svg {
-        width: 30px;
-        height: 30px;
-        fill: black;
-        cursor: pointer;
-    }
-
-    .carousel-controls {
-        position: absolute;
-        top: 50%;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        transform: translateY(-50%);
-    }
-
-    .carousel-button {
-        cursor: pointer;
-        padding: 16px;
-        color: white;
-        font-weight: bold;
-        background-color: rgba(0, 0, 0, 0.5);
-        border: none;
-    }
-
-    .carousel-button.left {
-        position: absolute;
-        left: 0;
-    }
-
-    .carousel-button.right {
-        position: absolute;
-        right: 0;
-    }
-
-    .carousel-button:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-</style>
-
-
     <div class="container" style="margin-bottom: 500px">
         <div class="row">
             {% if projects %}
@@ -99,19 +17,19 @@
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5">
-                                        <div class="project-image-div" 
-                                             style="background: 
-                                                 {% with project.images.first as image %}
-                                                     {% if image %}
-                                                         url('{{ image.image.url }}')
-                                                     {% else %}
-                                                         white
-                                                     {% endif %}
-                                                 {% endwith %}
-                                                 ;background-size: cover;">
+                                        <div class="project-image-div"
+                                             style="background:
+                                                     {% with project.images.first as image %}
+                                                         {% if image %}
+                                                             url('{% url "core:serve_media" path=image.image.name %}')
+                                                         {% else %}
+                                                             white
+                                                         {% endif %}
+                                                     {% endwith %}
+                                                     ;background-size: cover;">
                                             <a href="javascript:void(0);"
                                                onclick="openGalleryModal({{ project.id }}, '{{ project.title }}', {{ project.media|safe }})"
-                                               style="display: flex;flex-direction: column;align-items: center;text-decoration: none;color: purple;margin: 5px;background-color: rgba(255, 255, 255, 0.3);padding: 5px;border: 1px solid #d9d9d9;border-radius: 2px;">
+                                               style="display: flex;flex-direction: column;align-items: center;text-decoration: none;color: purple;margin: 5px;background-color: rgba(255, 255, 255, 0.3);padding: 5px;border: 1px solid #d9d9d9;border-radius: 2px;width: auto;">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                      fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
                                                     <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"></path>
@@ -164,7 +82,8 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <p style="font-size: 20px;font-weight: bold;text-align: center;margin-top: 30px;">There are no projects yet</p>
+                <p style="font-size: 20px;font-weight: bold;text-align: center;margin-top: 30px;">There are no projects
+                    yet</p>
             {% endif %}
         </div>
     </div>
@@ -173,14 +92,14 @@
     <div class="modal-overlay" id="gallery-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modal-title"></h3>
+                <h4 id="modal-title" style="color: purple"></h4>
                 <svg xmlns="http://www.w3.org/2000/svg" onclick="closeGalleryModal()" class="bi bi-x-square"
                      viewBox="0 0 16 16">
                     <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
                 </svg>
             </div>
-            <div id="gallery-content" style="display: flex; flex-wrap: wrap;"></div>
+            <div class="row" id="gallery-content" style="width: 100%;flex: 1;overflow-y: scroll;padding: 5px;display: flex;align-items: center;justify-content: center"></div>
         </div>
     </div>
 
@@ -195,7 +114,7 @@
                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
                 </svg>
             </div>
-            <div id="detail-content" style="display: flex; justify-content: center; align-items: center;"></div>
+            <div id="detail-content" style="flex: 1;display: flex; justify-content: center; align-items: center;max-height: 82vh"></div>
             <div class="carousel-controls">
                 <button class="carousel-button left" onclick="previousMedia()">&#10094;</button>
                 <button class="carousel-button right" onclick="nextMedia()">&#10095;</button>
@@ -203,87 +122,145 @@
         </div>
     </div>
 
-    <script>
-        let currentMediaIndex = 0;
-        let mediaItems = [];
+   <script>
+    let currentMediaIndex = 0;
+    let mediaItems = [];
 
-        function openGalleryModal(projectId, projectTitle, media) {
-            document.getElementById('modal-title').textContent = projectTitle;
+    function openGalleryModal(projectId, projectTitle, media) {
+        document.getElementById('modal-title').textContent = projectTitle;
 
-            if (!media || !Array.isArray(media) || media.length === 0) {
-                alert('No media available for this project.');
-                return;
+        if (!media || !Array.isArray(media) || media.length === 0) {
+            alert('No media available for this project.');
+            return;
+        }
+
+        mediaItems = media;
+        const galleryContent = document.getElementById('gallery-content');
+        galleryContent.innerHTML = '';
+
+        media.forEach((item, index) => {
+            const mediaElement = document.createElement(item.type === 'image' ? 'img' : 'video');
+            const container = document.createElement('div');
+
+            // Set container class for Bootstrap grid layout
+            container.setAttribute('class', 'col-12 col-sm-10 col-md-10 col-lg-6 col-xl-6');
+
+            // Add Flexbox styles to center media element
+            container.style.display = 'flex';
+            container.style.flexDirection = 'row';
+            container.style.justifyContent = 'center';  // Horizontal centering
+            container.style.alignItems = 'center';      // Vertical centering
+
+            // Determine the media URL
+            if (item.type === 'image') {
+                mediaElement.src = '/media/' + item.url; // Assuming item.url is relative to the media directory
+            } else if (item.type === 'video') {
+                mediaElement.src = '/media/' + item.url;
             }
 
-            mediaItems = media;
-            const galleryContent = document.getElementById('gallery-content');
-            galleryContent.innerHTML = '';
-
-            media.forEach((item, index) => {
-                const mediaElement = document.createElement(item.type === 'image' ? 'img' : 'video');
-                mediaElement.src = item.url;
-                mediaElement.style.width = '100%';
-                mediaElement.style.maxHeight = '60vh';
-                mediaElement.style.objectFit = 'contain';
-                mediaElement.setAttribute('data-index', index);
-                mediaElement.onclick = () => openDetailModal(index);
-                if (item.type === 'video') {
-                    mediaElement.controls = true;
-                }
-                galleryContent.appendChild(mediaElement);
-            });
-
-            document.getElementById('gallery-modal').style.display = 'flex';
-        }
-
-        function closeGalleryModal() {
-            document.getElementById('gallery-modal').style.display = 'none';
-        }
-
-        function openDetailModal(index) {
-            currentMediaIndex = index;
-            updateDetailModal();
-            closeGalleryModal();
-            document.getElementById('detail-modal').style.display = 'flex';
-        }
-
-        function closeDetailModal() {
-            document.getElementById('detail-modal').style.display = 'none';
-        }
-
-        function updateDetailModal() {
-            const detailContent = document.getElementById('detail-content');
-            detailContent.innerHTML = '';
-            const mediaItem = mediaItems[currentMediaIndex];
-            const mediaElement = document.createElement(mediaItem.type === 'image' ? 'img' : 'video');
-            mediaElement.src = mediaItem.url;
             mediaElement.style.width = '100%';
-            mediaElement.style.objectFit = 'contain';
-            if (mediaItem.type === 'video') {
+            mediaElement.style.maxHeight = '60vh';       // Set max height
+            mediaElement.style.objectFit = 'contain';    // Prevent distortion
+            mediaElement.setAttribute('data-index', index);
+
+            // Using a function to prevent the video from playing again
+            mediaElement.onclick = function() {
+                openDetailModal(index);
+            };
+
+            if (item.type === 'video') {
                 mediaElement.controls = true;
             }
-            detailContent.appendChild(mediaElement);
-            updateButtonStates();
+
+            // Append mediaElement to container
+            container.appendChild(mediaElement);
+            galleryContent.appendChild(container);
+        });
+
+        document.getElementById('gallery-modal').style.display = 'flex';
+    }
+
+    function closeGalleryModal() {
+        // Stop all videos in the gallery modal
+        const videoElements = document.querySelectorAll('#gallery-content video');
+        videoElements.forEach(video => {
+            video.pause(); // Pause the video
+            video.currentTime = 0; // Reset the video
+        });
+
+        document.getElementById('gallery-modal').style.display = 'none';
+    }
+
+    function openDetailModal(index) {
+        currentMediaIndex = index;
+
+        // Stop all videos in the gallery modal before opening the detail modal
+        const videoElements = document.querySelectorAll('#gallery-content video');
+        videoElements.forEach(video => {
+            video.pause(); // Pause the video
+            video.currentTime = 0; // Reset the video
+            video.onplay = function() { video.pause(); }; // Prevent the video from playing again
+        });
+
+        // Now close the gallery modal and open the detail modal
+        closeGalleryModal();
+        updateDetailModal();
+        document.getElementById('detail-modal').style.display = 'flex';
+    }
+
+    function closeDetailModal() {
+        // Stop the video if it is playing in the detail modal
+        const videoElement = document.querySelector('#detail-content video');
+        if (videoElement) {
+            videoElement.pause(); // Pause the video
+            videoElement.currentTime = 0; // Reset the video
         }
 
-        function previousMedia() {
-            if (currentMediaIndex > 0) {
-                currentMediaIndex--;
-                updateDetailModal();
-            }
-        }
+        document.getElementById('detail-modal').style.display = 'none';
 
-        function nextMedia() {
-            if (currentMediaIndex < mediaItems.length - 1) {
-                currentMediaIndex++;
-                updateDetailModal();
-            }
-        }
+        // Reopen the gallery modal after closing the detail modal
+        document.getElementById('gallery-modal').style.display = 'flex';
+    }
 
-        function updateButtonStates() {
-            document.querySelector('.carousel-button.left').disabled = currentMediaIndex === 0;
-            document.querySelector('.carousel-button.right').disabled = currentMediaIndex === mediaItems.length - 1;
+    function updateDetailModal() {
+        const detailContent = document.getElementById('detail-content');
+        detailContent.innerHTML = '';
+        const mediaItem = mediaItems[currentMediaIndex];
+        const mediaElement = document.createElement(mediaItem.type === 'image' ? 'img' : 'video');
+        
+        mediaElement.src = '/media/' + mediaItem.url;
+        mediaElement.style.width = 'auto';
+        mediaElement.style.height = 'auto';
+        mediaElement.style.width = '100%';
+        mediaElement.style.maxHeight = '100%';
+        mediaElement.style.objectFit = 'contain';
+        
+        if (mediaItem.type === 'video') {
+            mediaElement.controls = true;
         }
-    </script>
+        
+        detailContent.appendChild(mediaElement);
+        updateButtonStates();
+    }
+
+    function previousMedia() {
+        if (currentMediaIndex > 0) {
+            currentMediaIndex--;
+            updateDetailModal();
+        }
+    }
+
+    function nextMedia() {
+        if (currentMediaIndex < mediaItems.length - 1) {
+            currentMediaIndex++;
+            updateDetailModal();
+        }
+    }
+
+    function updateButtonStates() {
+        document.querySelector('.carousel-button.left').disabled = currentMediaIndex === 0;
+        document.querySelector('.carousel-button.right').disabled = currentMediaIndex === mediaItems.length - 1;
+    }
+</script>
 
 {% endblock %}

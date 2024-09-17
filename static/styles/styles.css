@@ -345,16 +345,15 @@ hr {
 
 .main-nav-items .nav-link {
     color: white;
-    border-radius: 4px;
     padding: 8px 20px!important;
-    border: 1px solid purple;
+    border-bottom: 2px solid purple;
 }
 .main-nav-items .nav-link:hover {
     color: white;
 }
 
 .main-nav-items .active_link {
-    border: 1px solid white;
+    border-bottom: 2px solid white;
     color: white;
 }
 
@@ -578,3 +577,83 @@ footer {
     background-color: red;
     width: 100%;
 }
+
+/* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none; /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+            width: 70vw;
+            height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #eae9e9;
+            padding: 10px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header svg {
+            width: 30px;
+            height: 30px;
+            fill: purple;
+            cursor: pointer;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .carousel-button {
+            cursor: pointer;
+            padding: 16px 20px;
+            color: white;
+            font-weight: bold;
+            background-color: rgba(128, 0, 128, 0.50);
+            border: none;
+            border-radius: 3px;
+            margin: 3px;
+        }
+
+        .carousel-button.left {
+            position: absolute;
+            left: 0;
+        }
+
+        .carousel-button.right {
+            position: absolute;
+            right: 0;
+        }
+
+        .carousel-button:hover {
+            background-color: rgba(128, 0, 128, 1);
+        }

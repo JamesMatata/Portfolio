@@ -1,6 +1,7 @@
-import json
+from django.core.mail import send_mail
 import os
 from wsgiref.util import FileWrapper
+from mimetypes import guess_type
 
 import requests
 from django.shortcuts import render, get_object_or_404
@@ -9,6 +10,7 @@ from django.conf import settings
 from django.utils.http import http_date
 from django.views.decorators.csrf import csrf_exempt
 
+from core.forms import HireMeForm, BookCallForm
 from core.models import Project, Video
 
 
@@ -39,13 +41,13 @@ def portfolio(request):
         for image in project.images.all():
             project.media.append({
                 'type': 'image',
-                'url': image.image.url,
+                'url': image.image.name,  # Use 'name' instead of 'url'
                 'reference': image.reference
             })
         if project.project_video:
             project.media.append({
                 'type': 'video',
-                'url': project.project_video.video.url,
+                'url': project.project_video.video.name,  # Use 'name' instead of 'url'
                 'reference': 'video'
             })
 
@@ -63,48 +65,44 @@ def contact_view(request):
 
         if first_name and last_name and email and subject and message:
             full_message = f"From: {first_name} {last_name}\nEmail: {email}\n\n{message}"
-            response = send_mailgun_email(subject, full_message, email, ['jamesmatatamule@gmail.com'])
-            if response.status_code == 200:
-                return JsonResponse({'success': True})
-            else:
-                error_message = response.json().get('message', 'Failed to send email')
-                return JsonResponse({'success': False, 'error': error_message})
-        return JsonResponse({'success': False, 'error': 'All fields are required'})
 
+            try:
+                # Send the email using Django's send_mail function
+                send_mail(
+                    subject,
+                    full_message,
+                    'jamesmatatamule@gmail.com',  # From email
+                    ['jamesmatatamule@gmail.com'],  # To email
+                    fail_silently=False,
+                )
+
+                # Pass success message to the template
+                return render(request, 'Portfolio/contact.html',
+                              {'success': 'Your message has been sent successfully.'})
+
+            except Exception as e:
+                # Pass error message to the template
+                return render(request, 'Portfolio/contact.html', {'error': f'Failed to send email: {str(e)}'})
+
+        # If any field is missing, show an error message
+        return render(request, 'Portfolio/contact.html', {'error': 'All fields are required.'})
+
+    # Render the contact form if not a POST request
     return render(request, 'Portfolio/contact.html')
-
-
-def send_mailgun_email(subject, message, from_email, to_emails):
-    print(subject, message, from_email, to_emails)
-    return requests.post(
-        f"https://api.mailgun.net/v3/{settings.MAILGUN_DOMAIN_NAME}/messages",
-        auth=("api", settings.MAILGUN_API_KEY),
-        data={
-            "from": f"{from_email}",
-            "to": to_emails,
-            "subject": subject,
-            "text": message,
-        },
-    )
 
 
 def serve_media(request, path):
     try:
         # Build the full path to the media file
-        media_path = os.path.join('media', path)
-        extension = os.path.splitext(media_path)[1].lower()
+        media_path = os.path.join(settings.MEDIA_ROOT, path)
+        extension = os.path.splitext(path)[1].lower()
 
-        # Supported file extensions
-        video_extensions = ['.mp4', '.avi', '.mov']
-        audio_extensions = ['.wav', '.mp3']
+        # Guess the content type if not specified
+        content_type, _ = guess_type(media_path)
 
-        # Determine the content type
-        if extension in video_extensions:
-            content_type = 'video/mp4'
-        elif extension in audio_extensions:
-            content_type = 'audio/mpeg'
-        else:
-            return HttpResponseNotFound('<h1>File type not supported</h1>')
+        # If content type could not be guessed, default to 'application/octet-stream'
+        if content_type is None:
+            content_type = 'application/octet-stream'
 
         # Get the file size
         file_size = os.path.getsize(media_path)
@@ -147,3 +145,26 @@ def serve_media(request, path):
         return HttpResponseNotFound('<h1>File not found</h1>')
     except Exception as e:
         return HttpResponseServerError(f'<h1>Server error: {e}</h1>')
+
+
+
+def book_call(request):
+    if request.method == 'POST':
+        form = BookCallForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    return JsonResponse({'success': False})
+
+
+def hire_me(request):
+    if request.method == 'POST':
+        form = HireMeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    return JsonResponse({'success': False})

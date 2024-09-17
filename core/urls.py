@@ -10,4 +10,6 @@ urlpatterns = [
     path('portfolio/', views.portfolio, name='portfolio'),
     path('contact/', contact_view, name='contact'),
     path('media/<path:path>/', serve_media, name='serve_media'),
+    path('book-call/', views.book_call, name='book_call'),
+    path('hire-me/', views.hire_me, name='hire_me'),
 ]
