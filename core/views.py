@@ -3,8 +3,7 @@ import os
 from wsgiref.util import FileWrapper
 from mimetypes import guess_type
 
-import requests
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, HttpResponseNotFound, HttpResponseServerError
 from django.conf import settings
 from django.utils.http import http_date
@@ -145,7 +144,6 @@ def serve_media(request, path):
         return HttpResponseNotFound('<h1>File not found</h1>')
     except Exception as e:
         return HttpResponseServerError(f'<h1>Server error: {e}</h1>')
-
 
 
 def book_call(request):

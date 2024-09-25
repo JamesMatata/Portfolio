@@ -97,6 +97,10 @@
     .main-nav-items .nav-link.active {
         border: 1px solid white;
     }
+    .modal-content, .book-modal-content, .hire-modal-content {
+        width: 95vw !important;
+        height: auto !important;
+    }
 }
 
 @media (min-width: 576px) {
@@ -345,9 +349,10 @@ hr {
 
 .main-nav-items .nav-link {
     color: white;
-    padding: 8px 20px!important;
+    padding: 8px 20px !important;
     border-bottom: 2px solid purple;
 }
+
 .main-nav-items .nav-link:hover {
     color: white;
 }
@@ -579,81 +584,120 @@ footer {
 }
 
 /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            display: none; /* Initially hidden */
-            justify-content: center;
-            align-items: center;
-        }
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none; /* Initially hidden */
+    justify-content: center;
+    align-items: center;
+}
 
-        .modal-content {
-            background-color: white;
-            border-radius: 0 0 8px 8px;
-            width: 70vw;
-            height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
+.modal-content, .book-modal-content, .hire-modal-content {
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 
-        .modal-header {
-            position: relative;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: #eae9e9;
-            padding: 10px 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.modal-content {
+    width: 70vw;
+    height: 90vh;
+}
 
-        .modal-header svg {
-            width: 30px;
-            height: 30px;
-            fill: purple;
-            cursor: pointer;
-        }
+.book-modal-content, .hire-modal-content {
+    width: 35vw;
+    height: auto;
+    margin: 30px auto auto;
+    padding: 5px
+}
 
-        .carousel-controls {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-        }
+.modal-header {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #eae9e9;
+    padding: 10px 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .carousel-button {
-            cursor: pointer;
-            padding: 16px 20px;
-            color: white;
-            font-weight: bold;
-            background-color: rgba(128, 0, 128, 0.50);
-            border: none;
-            border-radius: 3px;
-            margin: 3px;
-        }
+.modal-header svg {
+    width: 30px;
+    height: 30px;
+    fill: purple;
+    cursor: pointer;
+}
 
-        .carousel-button.left {
-            position: absolute;
-            left: 0;
-        }
+.carousel-controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
 
-        .carousel-button.right {
-            position: absolute;
-            right: 0;
-        }
+.carousel-button {
+    cursor: pointer;
+    padding: 16px 20px;
+    color: white;
+    font-weight: bold;
+    background-color: rgba(128, 0, 128, 0.50);
+    border: none;
+    border-radius: 3px;
+    margin: 3px;
+}
 
-        .carousel-button:hover {
-            background-color: rgba(128, 0, 128, 1);
-        }
+.carousel-button.left {
+    position: absolute;
+    left: 0;
+}
+
+.carousel-button.right {
+    position: absolute;
+    right: 0;
+}
+
+.carousel-button:hover {
+    background-color: rgba(128, 0, 128, 1);
+}
+
+.skill-icon svg {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.form_inputs {
+    width: 100%;
+    padding: 7px;
+    border-radius: 2px;
+    border: 1px solid black;
+}
+
+.form_inputs:focus {
+    outline: none;
+    border: 1px solid purple;
+}
+
+.form_submit_button {
+    width: 100%;
+    padding: 7px 0;
+    margin-top: 10px;
+    border-radius: 3px;
+    background: purple;
+    color: white;
+    border: none;
+
+}

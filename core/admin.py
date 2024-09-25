@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import Project, Image, Video, BookCall, HireMe
-from .utils import send_hire_me_email, send_book_call_email
 
 
 class ImageInline(admin.TabularInline):
@@ -17,7 +16,8 @@ class VideoInline(admin.StackedInline):
 class ProjectAdmin(admin.ModelAdmin):
     list_display = (
         'title', 'start_date', 'end_date', 'live_preview_link', 'github_link', 'tools_and_languages', 'created_at',
-        'updated_at')
+        'updated_at'
+    )
     inlines = [ImageInline, VideoInline]
     search_fields = ('title', 'description', 'tools_and_languages')
     list_filter = ('start_date', 'end_date')
@@ -43,10 +43,6 @@ class HireMeAdmin(admin.ModelAdmin):
 
     # Override the save_model method
     def save_model(self, request, obj, form, change):
-        # Check if the object is confirmed and hasn't been confirmed before
-        if change and obj.is_confirmed and not HireMe.objects.get(pk=obj.pk).is_confirmed:
-            # Send the confirmation email
-            send_hire_me_email(obj)
         super().save_model(request, obj, form, change)
 
 
@@ -58,8 +54,4 @@ class BookCallAdmin(admin.ModelAdmin):
 
     # Override the save_model method
     def save_model(self, request, obj, form, change):
-        # Check if the object is confirmed and hasn't been confirmed before
-        if change and obj.is_confirmed and not BookCall.objects.get(pk=obj.pk).is_confirmed:
-            # Send the confirmation email
-            send_book_call_email(obj)
         super().save_model(request, obj, form, change)

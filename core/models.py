@@ -1,4 +1,9 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
 
 
 class Project(models.Model):
@@ -57,3 +62,39 @@ class HireMe(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.email}"
+
+
+# Signal to send email when a call is confirmed
+@receiver(post_save, sender=BookCall)
+def send_book_call_email(sender, instance, created, **kwargs):
+    if instance.is_confirmed:
+        subject = f"Call Booking Confirmation for {instance.name}"
+        html_message = render_to_string('emails/call_confirmation_email.html', {
+            'book_call': instance,
+        })
+        send_mail(
+            subject=subject,
+            message='',  # Leave this as an empty string
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[instance.email],
+            fail_silently=False,
+            html_message=html_message,
+        )
+
+
+# Signal to send email when a new hire is saved
+@receiver(post_save, sender=HireMe)
+def send_hire_me_email(sender, instance, created, **kwargs):
+    if created:  # Only send email when a new instance is created
+        subject = f"Confirmation for {instance.name}"
+        html_message = render_to_string('emails/hire_me_received_email.html', {
+            'hire_me': instance,
+        })
+        send_mail(
+            subject=subject,
+            message='',  # Leave this as an empty string
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[instance.email],
+            fail_silently=False,
+            html_message=html_message,
+        )
