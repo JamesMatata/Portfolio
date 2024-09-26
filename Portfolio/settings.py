@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+from decouple import config, Csv
 
 from django.contrib import staticfiles
 
@@ -22,12 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5x)8y8r0m_x8gd-rkwck#u@@@felfdi%e%09##i!8y!p&!)w^a'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)  # Cast to bool
 
-ALLOWED_HOSTS = ['192.168.8.146', '127.0.0.1', '*']
+# Allow specific hosts in production
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=Csv())
 
 
 # Application definition
@@ -139,5 +141,5 @@ EMAIL_HOST = 'smtp.elasticemail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'jamesmatatamule@gmail.com'
-EMAIL_HOST_PASSWORD = 'D85C08D0F492D47F5CA9E1DD8743038AED0E'
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'jamesmatatamule@gmail.com'
