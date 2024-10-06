@@ -4,10 +4,55 @@
 {% block title %} JM | Home {% endblock %}
 
 {% block content %}
+    <style>
+    .about_row {
+        animation: borderAnimation 6s infinite;
+    }
+    @keyframes borderAnimation {
+            0% {
+                border-radius: 25% 0 0 0; /* Top-left */
+            }
+            25% {
+                border-radius: 0 25% 0 0; /* Top-right */
+            }
+            50% {
+                border-radius: 0 0 25% 0; /* Bottom-right */
+            }
+            75% {
+                border-radius: 0 0 0 25%; /* Bottom-left */
+            }
+            100% {
+                border-radius: 25% 0 0 0; /* Back to Top-left */
+            }
+        
+        }
+    .hire_me {
+        border: 2px solid #008080;
+        background-color: #008080;
+    }
+    .book_call {
+        border: 2px solid purple;
+        background-color: purple;
+    }
+    .book_call:hover {
+            background-color: white;
+            border: 2px solid #008080;
+            color: #008080;
+        }
+    .hire_me:hover {
+            background-color: white !important;
+            border: 2px solid purple;
+            color: purple;
+        }
+    #bookCallForm label, #hireMeForm label {
+        color: #008080;
+    }
+    
+    </style>
     <div class="modal-overlay" id="book-call-modal">
         <div class="book-modal-content">
             <div class="modal-header">
-                <h4 id="modal-title" style="color: purple">Book a Call</h4>
+                <h4 id="modal-title">Book a Call</h4>
                 <svg xmlns="http://www.w3.org/2000/svg" onclick="closeBookModal()" class="bi bi-x-square"
                      viewBox="0 0 16 16">
                     <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
@@ -42,7 +87,7 @@
     <div class="modal-overlay" id="hire-me-modal">
         <div class="hire-modal-content">
             <div class="modal-header">
-                <h4 style="color: purple" id="modal-title">Hire me</h4>
+                <h4  id="modal-title">Hire me</h4>
                 <svg xmlns="http://www.w3.org/2000/svg" onclick="closeHireModal()" class="bi bi-x-square"
                      viewBox="0 0 16 16">
                     <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
@@ -71,7 +116,7 @@
     </div>
 
     <div class="container" style="margin-bottom: 100px">
-        <div class="row">
+        <div class="row" style="margin-bottom: 200px">
             <div
                     class="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-11"
                     style="margin: auto; margin-top: 20px"
@@ -80,15 +125,15 @@
                     <div
                             class="col-11 col-sm-6 col-md-6 col-lg-7 order-md-1 order-lg-1 order-sm-1 order-2 text-center text-lg-start text-box"
                     >
-                        <h3 style="text-align: center">
+                        <h3 style="text-align: center;color: #008080;">
                             Hi, I'm
                             <span style="color: purple;"><b>James Matata</b></span>,<br>
                             Passionate <b>full-stack Django developer</b> and <b>Designer</b> crafting
                             seamless digital experiences with innovative solutions.
                         </h3>
                         <div class="mt-3">
-                            <button class="slide-buttons" onclick="openBookModal()">Book a Call</button>
-                            <button class="slide-buttons" onclick="openHireModal()">Hire Me</button>
+                            <button class="slide-buttons book_call" onclick="openBookModal()">Book a Call</button>
+                            <button class="slide-buttons hire_me" style="background: #008080" onclick="openHireModal()">Hire Me</button>
                         </div>
                     </div>
                     <div
@@ -104,15 +149,16 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row about_row" style="background-image: url('media/Portfolio_files/portfolio_svg.svg');background-size: contain;display: flex;flex-direction: row;align-items: center;justify-content: center;color: rgba(128,128,128,0.35);background-color: rgb(253,251,251);background-repeat: repeat">
             <div
                     class="col-11 col-sm-11 col-md-11 col-lg-10 col-xl-8 about"
                     id="about-div"
             >
-                <h1 style="text-align: center;font-family: 'Baumans', sans-serif;font-weight: bold;color: black">
+                <div class="moving-dot"></div>
+                <h1 style="text-align: center;font-family: 'Baumans', sans-serif;font-weight: bold;color: #008080;background-color: rgb(253,251,251)">
                     About</h1>
-                <h4>Crafting Dynamic Web Experiences with Expertise and Passion</h4>
-                <p>
+                <h4 style="font-size: 25px;color: purple">Crafting Dynamic Web Experiences with Expertise and Passion</h4>
+                <p style="color: #008080">
                     Experienced full-stack web developer adept at creating dynamic and
                     responsive websites. Proficient in front-end technologies such as
                     HTML, CSS, and JavaScript, with a strong foundation in back-end
@@ -180,9 +226,9 @@
 
         <div class="row" style="margin-top: 200px">
             <div class="col-11 col-sm-10 col-md-9 col-lg-8 col-xl-7 skills" id="skills-div" style="margin: auto">
-                <h1 style="text-align: center;font-family: 'Baumans', sans-serif;font-weight: bold;color: black">
+                <h1 style="text-align: center;font-family: 'Baumans', sans-serif;font-weight: bold;color: #008080">
                     Skills</h1>
-                <h4>
+                <h4 style="color: purple;">
                     My proficiency lies in a wide array of skills, tools, and
                     technologies.
                 </h4>
@@ -385,9 +431,9 @@
                     id="recent-projects-div"
                     style="margin: auto"
             >
-                <h1 style="text-align: center;font-family: 'Baumans', sans-serif;font-weight: bold;color: black">Recent
+                <h1 style="text-align: center;font-family: 'Baumans', sans-serif;font-weight: bold;color: #008080">Recent
                     Projects</h1>
-                <hr/>
+                <hr style="margin-bottom: 5px"/>
                 <div class="row" style="height: 350px; overflow: hidden">
                     {% if recent_projects %}
                         {% for project in recent_projects %}
@@ -472,7 +518,10 @@
                 </div>
                 {% if recent_projects %}
                     <a href="{% url 'core:portfolio' %}">
-                    <button class="to-portfolio-button">Portfolio</button>
+                    <button class="to-portfolio-button">
+                        Portfolio
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" style="margin-left: 5px" viewBox="0 0 15 15"><path fill="currentColor" d="M8.293 2.293a1 1 0 0 1 1.414 0l4.5 4.5a1 1 0 0 1 0 1.414l-4.5 4.5a1 1 0 0 1-1.414-1.414L11 8.5H1.5a1 1 0 0 1 0-2H11L8.293 3.707a1 1 0 0 1 0-1.414"/></svg>
+                    </button>
                     </a>
                 {% endif %}
             </div>

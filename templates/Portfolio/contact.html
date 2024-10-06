@@ -7,41 +7,50 @@
     <div class="container" style="margin-bottom: 100px">
         <div class="row">
             <div class="col-11 col-sm-11 col-md-10 col-lg-9 col-xl-7" style="margin: auto; margin-top: 20px;">
-                <p style="text-align: center; font-weight: bold;">
-                    Feel free to reach out through the contact form or connect via social media. Whether you're a developer, potential client, or simply interested in web development, I'm open to collaboration and new opportunities!
-                </p>
-                <hr>
-                <form method="post" action="{% url 'core:contact' %}">
-                    {% csrf_token %}
-                    <div class="container-fluid">
-                        <div class="row" style="display: flex; align-items: center; justify-content: center;">
-                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
-                                <label for="first_name">First Name:</label>
-                                <input class="contact-input" type="text" id="first_name" name="first_name" style="width: 100%;" required>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
-                                <label for="last_name">Last Name:</label>
-                                <input class="contact-input" type="text" id="last_name" name="last_name" style="width: 100%;" required>
-                            </div>
-                            <div class="col-12">
-                                <label for="email">Email Address:</label>
-                                <input class="contact-input" type="email" id="email" name="email" style="width: 100%;" required>
-                            </div>
-                            <div class="col-12">
-                                <label for="subject">Subject:</label>
-                                <input class="contact-input" type="text" id="subject" name="subject" style="width: 100%;" required>
-                            </div>
-                            <div class="col-12">
-                                <label for="message" style="margin-top: 5px;">Message:</label>
-                                <textarea class="contact-input" id="message" name="message" style="width: 100%; max-width: 100%;" required></textarea>
-                            </div>
-                            <div class="col-12 d-flex" style="align-items: center; justify-content: center;">
-                                <button type="submit" style="width: auto; padding: 8px 30px; border: none; background: purple; border-radius: 2px; color: white;">Send</button>
-                            </div>
-                            <div id="response-message" style="display: none; margin-top: 15px;"></div>
-                        </div>
+                {% if request.GET.success %}
+                    <!-- Check if the form was submitted successfully -->
+                    <div class="alert alert-success" style="text-align: center; margin-top: 20px;margin-bottom: 300px;">
+                        Thank you for your message, {{ request.GET.first_name }}! We will get back to you shortly.
+                        <br>
+                        <a href="{% url 'core:home' %}" style="color: purple;">Return to Homepage</a>
                     </div>
-                </form>
+                {% else %}
+                    <p style="text-align: center; font-weight: bold;color: #008080">
+                        Feel free to reach out through the contact form or connect via social media. Whether you're a developer, potential client, or simply interested in web development, I'm open to collaboration and new opportunities!
+                    </p>
+                    <hr>
+                    <form method="post" action="{% url 'core:contact' %}">
+                        {% csrf_token %}
+                        <div class="container-fluid">
+                            <div class="row" style="display: flex; align-items: center; justify-content: center;">
+                                <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label for="first_name">First Name:</label>
+                                    <input class="contact-input" type="text" id="first_name" name="first_name" style="width: 100%;" required>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label for="last_name">Last Name:</label>
+                                    <input class="contact-input" type="text" id="last_name" name="last_name" style="width: 100%;" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="email">Email Address:</label>
+                                    <input class="contact-input" type="email" id="email" name="email" style="width: 100%;" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="subject">Subject:</label>
+                                    <input class="contact-input" type="text" id="subject" name="subject" style="width: 100%;" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="message" style="margin-top: 5px;">Message:</label>
+                                    <textarea class="contact-input" id="message" name="message" style="width: 100%; max-width: 100%;" required></textarea>
+                                </div>
+                                <div class="col-12 d-flex" style="align-items: center; justify-content: center;">
+                                    <button type="submit" style="width: auto; padding: 8px 30px; border: none; background: linear-gradient(to right, #404080, #334D80); border-radius: 2px; color: white;">Send</button>
+                                </div>
+                                <div id="response-message" style="display: none; margin-top: 15px;"></div>
+                            </div>
+                        </div>
+                    </form>
+                {% endif %}
             </div>
         </div>
     </div>

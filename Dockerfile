@@ -7,13 +7,8 @@ WORKDIR /app
 # Copy the requirements file
 COPY requirements.txt /app/
 
-# Install system dependencies and Python packages
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc libpq-dev && \
-    pip install --no-cache-dir -r requirements.txt && \
-    apt-get remove -y gcc libpq-dev && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+# Install Python packages from requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire Django project
 COPY . /app/

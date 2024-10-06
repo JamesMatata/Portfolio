@@ -1,11 +1,12 @@
-from django.core.mail import send_mail
 import os
 from wsgiref.util import FileWrapper
 from mimetypes import guess_type
+from django.core.mail import EmailMessage
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseNotFound, HttpResponseServerError
 from django.conf import settings
+from django.template.loader import render_to_string
 from django.utils.http import http_date
 from django.views.decorators.csrf import csrf_exempt
 
@@ -62,32 +63,29 @@ def contact_view(request):
         subject = request.POST.get('subject')
         message = request.POST.get('message')
 
-        if first_name and last_name and email and subject and message:
-            full_message = f"From: {first_name} {last_name}\nEmail: {email}\n\n{message}"
+        # Compose the email
+        email_content = render_to_string('emails/contact_message.html', {
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'subject': subject,
+            'message': message,
+        })
 
-            try:
-                # Send the email using Django's send_mail function
-                send_mail(
-                    subject,
-                    full_message,
-                    'jamesmatatamule@gmail.com',  # From email
-                    ['jamesmatatamule@gmail.com'],  # To email
-                    fail_silently=False,
-                )
+        # Send the email
+        email_message = EmailMessage(
+            subject=f"New Contact Form Submission: {subject}",
+            body=email_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=['jamesmatatamule@gmail.com'],  # Replace with your recipient email
+        )
+        email_message.content_subtype = 'html'  # Set the content type to HTML
+        email_message.send()
 
-                # Pass success message to the template
-                return render(request, 'Portfolio/contact.html',
-                              {'success': 'Your message has been sent successfully.'})
-
-            except Exception as e:
-                # Pass error message to the template
-                return render(request, 'Portfolio/contact.html', {'error': f'Failed to send email: {str(e)}'})
-
-        # If any field is missing, show an error message
-        return render(request, 'Portfolio/contact.html', {'error': 'All fields are required.'})
-
-    # Render the contact form if not a POST request
-    return render(request, 'Portfolio/contact.html')
+        # Redirect to thank you page with success message
+        return redirect(f'{request.path}?success=True&first_name={first_name}')
+    else:
+        return render(request, 'Portfolio/contact.html')  # Render the contact form for GET requests
 
 
 def serve_media(request, path):

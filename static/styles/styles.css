@@ -9,7 +9,7 @@
 
     .image-box img {
         position: absolute;
-        transform: translate(-50%, 10%);
+        transform: translate(-50%, 5%);
         z-index: 1;
         width: 100%;
         height: 60vh;
@@ -23,7 +23,7 @@
         z-index: 2;
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
         opacity: 0.9;
-        margin: auto auto 100px;
+        margin: auto auto 200px;
     }
 
     .text-box h1 {
@@ -97,9 +97,12 @@
     .main-nav-items .nav-link.active {
         border: 1px solid white;
     }
+
     .modal-content, .book-modal-content, .hire-modal-content {
-        width: 95vw !important;
-        height: auto !important;
+        width: 90vw;
+        height: auto;
+        max-height: 90vh;
+        margin: auto;
     }
 }
 
@@ -176,6 +179,20 @@
     .main-nav-items .nav-link.active {
         border: 1px solid white;
     }
+
+    .modal-content, .book-modal-content, .hire-modal-content {
+        height: auto;
+        max-height: 85vh;
+        margin: auto;
+    }
+
+    .modal-content {
+        width: 95vw;
+    }
+
+    .book-modal-content, .hire-modal-content {
+        width: 65vw;
+    }
 }
 
 @media (min-width: 768px) {
@@ -250,6 +267,18 @@
 
     .main-nav-items .nav-link.active {
         border: 1px solid white;
+    }
+
+    .modal-content {
+        width: 85vw;
+        height: auto;
+        max-height: 85vh;
+    }
+
+    .book-modal-content, .hire-modal-content {
+        width: 45vw;
+        height: auto;
+        margin: auto;
     }
 }
 
@@ -326,6 +355,12 @@
     .main-nav-items .nav-link.active {
         border: 1px solid white;
     }
+
+    .book-modal-content, .hire-modal-content {
+        width: 30vw;
+        height: auto;
+        margin: auto;
+    }
 }
 
 hr {
@@ -339,18 +374,20 @@ hr {
     align-items: center;
     justify-content: space-between;
     background-color: purple;
+    background-image: linear-gradient(to right, purple, #008080);
     padding: 15px 10px;
 }
 
 .main-nav-items {
     margin-left: 5px;
     font-size: 16px;
+    border: none;
 }
 
 .main-nav-items .nav-link {
     color: white;
     padding: 8px 20px !important;
-    border-bottom: 2px solid purple;
+    border-bottom: 2px solid transparent;
 }
 
 .main-nav-items .nav-link:hover {
@@ -433,10 +470,9 @@ hr {
 
 .slide-buttons {
     padding: 8px 15px;
-    background: purple;
     color: white;
-    border: none;
     border-radius: 3px;
+    transition: all 0.15s;
 }
 
 .social-media-links {
@@ -454,7 +490,7 @@ hr {
     align-items: center;
     justify-content: center;
     margin-top: -15px;
-    background-color: white;
+    background-color: rgb(253,251,251);
     padding: 5px 15px;
 }
 
@@ -465,7 +501,7 @@ hr {
 }
 
 #about-div {
-    margin: 200px auto auto;
+    margin: 150px auto;
     border: 1px solid rgb(148, 158, 157);
     display: flex;
     flex-direction: column;
@@ -486,6 +522,7 @@ hr {
 #skills-div h4 {
     color: purple;
     text-align: center;
+
 }
 
 .social-media-icons-div svg {
@@ -512,7 +549,7 @@ hr {
 }
 
 footer {
-    border-top: 2px solid purple;
+    border: none;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -527,8 +564,12 @@ footer {
     padding: 7px 15px;
     border: none;
     border-radius: 3px;
-    background: purple;
+    background: linear-gradient(to right, #6A5ACD, #008080);
     color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .about-project {
@@ -554,7 +595,7 @@ footer {
 .footer-social-media-links-div svg {
     width: 20px;
     height: 20px;
-    fill: black;
+    fill: #008080;
     margin: 2px;
 }
 
@@ -581,6 +622,28 @@ footer {
 .project-image-div {
     background-color: red;
     width: 100%;
+    box-sizing: border-box;
+}
+
+.gallery_button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    margin: 5px;
+    background-color: black;
+    padding: 5px 10px;
+    border: 1px solid white;
+    border-radius: 3px;
+    width: auto;
+    box-sizing: border-box;
+    max-width: 60px;
+    transition: background-color 0.15s;
+    position: absolute;
+}
+.gallery_button:hover {
+    background: linear-gradient(to right, purple, #5A2680)
 }
 
 /* Modal Styles */
@@ -588,11 +651,12 @@ footer {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 1000;
     display: none; /* Initially hidden */
+    flex-direction: row;
     justify-content: center;
     align-items: center;
 }
@@ -603,20 +667,17 @@ footer {
     overflow-y: auto;
     position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .modal-content {
     width: 70vw;
     height: 90vh;
+    max-height: 90vh;
 }
 
 .book-modal-content, .hire-modal-content {
-    width: 35vw;
-    height: auto;
-    margin: 30px auto auto;
+    margin: 30px auto auto !important;
     padding: 5px
 }
 
@@ -625,17 +686,18 @@ footer {
     top: 0;
     left: 0;
     width: 100%;
-    background: #eae9e9;
-    padding: 10px 5px;
+    background: linear-gradient(to right, purple, #008080);
+    padding: 5px 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: white;
 }
 
 .modal-header svg {
     width: 30px;
     height: 30px;
-    fill: purple;
+    fill: white;
     cursor: pointer;
 }
 
@@ -653,7 +715,6 @@ footer {
     padding: 16px 20px;
     color: white;
     font-weight: bold;
-    background-color: rgba(128, 0, 128, 0.50);
     border: none;
     border-radius: 3px;
     margin: 3px;
@@ -661,16 +722,21 @@ footer {
 
 .carousel-button.left {
     position: absolute;
+    background-color: rgba(128, 0, 128);
     left: 0;
 }
 
 .carousel-button.right {
     position: absolute;
+    background-color: #008080;
     right: 0;
 }
 
-.carousel-button:hover {
-    background-color: rgba(128, 0, 128, 1);
+.carousel-button.left:disabled {
+    background-color: rgba(128, 0, 128, 0.5);
+}
+.carousel-button.right:disabled {
+    background-color: rgba(0, 128, 128, 0.5);
 }
 
 .skill-icon svg {
@@ -683,7 +749,7 @@ footer {
     width: 100%;
     padding: 7px;
     border-radius: 2px;
-    border: 1px solid black;
+    border: 1px solid #008080;
 }
 
 .form_inputs:focus {
@@ -695,9 +761,16 @@ footer {
     width: 100%;
     padding: 7px 0;
     margin-top: 10px;
-    border-radius: 3px;
+    border-radius: 0 0 3px 3px;
     background: purple;
     color: white;
     border: none;
+    transition: all 0.15s;
 
+}
+.form_submit_button:hover, .form_submit_button:active {
+    background: #008080;
+}
+.footer_links {
+    text-decoration: none;
 }

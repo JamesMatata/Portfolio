@@ -1,31 +1,18 @@
-# Ignore Python cache files
-__pycache__
+# Ignore Python cache
+__pycache__/
 *.pyc
 *.pyo
-*.pyd
 
-# Ignore the virtual environment
-.venv/
+# Ignore virtual environments
+venv/
+env/
 
-# Ignore local development settings
-.env
+# Ignore local database files
+*.sqlite3
 
-# Ignore database files
-db.sqlite3
+# Ignore Docker-specific files
+Dockerfile
+docker-compose.yml
 
-
-# Ignore static files (if you will collect them)
-static/
-
-# Ignore IDE/editor specific files
-.vscode/
-.idea/
-*.iml
-
-# Ignore log files
-*.log
-
-# Ignore other unnecessary files
-*.DS_Store
-*.bak
-*.tmp
+# Ignore .git folder and any other unnecessary files
+.git/
