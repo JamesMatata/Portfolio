@@ -104,6 +104,9 @@
         max-height: 90vh;
         margin: auto;
     }
+    .slide_content {
+        margin-bottom: 200px;
+    }
 }
 
 @media (min-width: 576px) {
@@ -193,6 +196,9 @@
     .book-modal-content, .hire-modal-content {
         width: 65vw;
     }
+    .slide_content {
+        margin-bottom: 200px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -280,6 +286,9 @@
         height: auto;
         margin: auto;
     }
+    .slide_content {
+        margin-bottom: 150px;
+    }
 }
 
 @media (min-width: 992px) {
@@ -361,6 +370,9 @@
         height: auto;
         margin: auto;
     }
+    .slide_content {
+        margin-bottom: 150px;
+    }
 }
 
 hr {
@@ -403,9 +415,14 @@ hr {
     position: relative;
     z-index: 3;
     padding: 0 20px;
-    background-color: #f8f6f6;
+    background-color: #ffffff;
     width: 100%;
-    border-bottom: 1px solid purple;
+    border-bottom: 2px solid;
+    border-image: linear-gradient(to right, purple, #008080);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 #min-main-menu ul {
@@ -415,13 +432,14 @@ hr {
 }
 
 #min-main-menu ul li {
-    padding: 5px;
+    padding: 7px;
+    border-radius: 2px;
 }
 
 #min-main-menu ul li:hover,
 #min-main-menu ul li:active {
-    background-color: white;
-    border: 1px solid purple;
+    color: white;
+    background-image: linear-gradient(to right, purple, #008080);
 }
 
 #languageOptionsDropdownMenuButton {
@@ -668,6 +686,7 @@ footer {
     position: relative;
     display: flex;
     box-sizing: border-box;
+    flex-direction: column;
 }
 
 .modal-content {

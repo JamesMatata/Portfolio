@@ -18,15 +18,7 @@
                                 <div class="row">
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5" style="box-sizing: border-box;padding: 2px">
                                         <div class="project-image-div"
-                                             style="background:
-                                                     {% with project.images.first as image %}
-                                                         {% if image %}
-                                                             url('{% url "core:serve_media" path=image.image.name %}')
-                                                         {% else %}
-                                                             white
-                                                         {% endif %}
-                                                     {% endwith %}
-                                                     ;background-size: cover;background-position: center;box-sizing: border-box">
+                                             style="background-image: {{ project.background_style }};background-size: cover;box-sizing: border-box;background-repeat: no-repeat;">
                                             <a href="javascript:void(0);"
                                                onclick="openGalleryModal({{ project.id }}, '{{ project.title }}', {{ project.media|safe }})"
                                                class="gallery_button">
@@ -129,6 +121,7 @@
     <script>
         let currentMediaIndex = 0;
         let mediaItems = [];
+        const mediaUrl = 'https://matataportfoliostorage.blob.core.windows.net/media/'
 
         function openGalleryModal(projectId, projectTitle, media) {
             document.getElementById('modal-title').textContent = projectTitle;
@@ -154,12 +147,13 @@
                 container.style.flexDirection = 'row';
                 container.style.justifyContent = 'center';  // Horizontal centering
                 container.style.alignItems = 'center';      // Vertical centering
+                
 
                 // Determine the media URL
                 if (item.type === 'image') {
-                    mediaElement.src = '/media/' + item.url; // Assuming item.url is relative to the media directory
+                    mediaElement.src = mediaUrl + item.url; // Assuming item.url is relative to the media directory
                 } else if (item.type === 'video') {
-                    mediaElement.src = '/media/' + item.url;
+                    mediaElement.src = mediaUrl + item.url;
                 }
 
                 mediaElement.style.width = '100%';
@@ -234,7 +228,7 @@
             const mediaItem = mediaItems[currentMediaIndex];
             const mediaElement = document.createElement(mediaItem.type === 'image' ? 'img' : 'video');
 
-            mediaElement.src = '/media/' + mediaItem.url;
+            mediaElement.src = mediaUrl + mediaItem.url;
             mediaElement.style.width = 'auto';
             mediaElement.style.height = 'auto';
             mediaElement.style.width = '100%';

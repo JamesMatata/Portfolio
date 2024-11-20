@@ -31,6 +31,13 @@ def portfolio(request):
     for project in projects:
         # Fetch the first image and video for the project
         project.first_image = project.images.first()
+        project.background_style = "white"  # Default
+        print(project.first_image)
+        print(project.first_image.image.url)
+
+        if project.first_image:
+            project.background_style = f"url('{project.first_image.image.url}')"
+
         try:
             project.project_video = project.video
         except Video.DoesNotExist:

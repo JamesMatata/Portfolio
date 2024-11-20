@@ -116,7 +116,7 @@
     </div>
 
     <div class="container" style="margin-bottom: 100px">
-        <div class="row" style="margin-bottom: 200px">
+        <div class="row slide_content">
             <div
                     class="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-11"
                     style="margin: auto; margin-top: 20px"
@@ -140,7 +140,7 @@
                             class="col-sm-6 col-md-6 col-lg-5 order-md-2 order-lg-2 order-sm-2 order-1 text-center image-box"
                     >
                         <img
-                                src="/media/Portfolio_files/jamesicon.svg"
+                                src="https://matataportfoliostorage.blob.core.windows.net/media/Portfolio_files/jamesicon.svg"
                                 alt="James Matata"
                                 style="width: 100%; max-height: 70vh; object-fit: contain"
                         />
@@ -149,12 +149,11 @@
             </div>
         </div>
 
-        <div class="row about_row" style="background-image: url('media/Portfolio_files/portfolio_svg.svg');background-size: contain;display: flex;flex-direction: row;align-items: center;justify-content: center;color: rgba(128,128,128,0.35);background-color: rgb(253,251,251);background-repeat: repeat">
+        <div class="row about_row" style="background-image: url('https://matataportfoliostorage.blob.core.windows.net/media/Portfolio_files/portfolio_svg.svg');background-size: contain;display: flex;flex-direction: row;align-items: center;justify-content: center;color: rgba(128,128,128,0.35);background-color: rgb(253,251,251);background-repeat: repeat">
             <div
                     class="col-11 col-sm-11 col-md-11 col-lg-10 col-xl-8 about"
                     id="about-div"
             >
-                <div class="moving-dot"></div>
                 <h1 style="text-align: center;font-family: 'Baumans', sans-serif;font-weight: bold;color: #008080;background-color: rgb(253,251,251)">
                     About</h1>
                 <h4 style="font-size: 25px;color: purple">Crafting Dynamic Web Experiences with Expertise and Passion</h4>
@@ -162,7 +161,7 @@
                     Experienced full-stack web developer adept at creating dynamic and
                     responsive websites. Proficient in front-end technologies such as
                     HTML, CSS, and JavaScript, with a strong foundation in back-end
-                    development using frameworks like Django and Node.js. Committed to
+                    development using Django framework. Committed to
                     delivering high-quality solutions that exceed client expectations
                     and enhance user engagement.
                 </p>
@@ -425,7 +424,7 @@
             </div>
         </div>
 
-        <div class="row" style="margin-top: 200px">
+        <div class="row" style="margin-top: 400px">
             <div
                     class="col-11 col-sm-11 col-md-10 col-lg-8 col-xl-7 recent-projects"
                     id="recent-projects-div"
@@ -438,7 +437,7 @@
                     {% if recent_projects %}
                         {% for project in recent_projects %}
                             <div
-                                    class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4"
+                                    class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4"
                                     style="height: 350px; background: #fbfbfb; padding: 0 5px"
                             >
                                 <div

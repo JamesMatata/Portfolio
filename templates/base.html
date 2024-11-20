@@ -12,7 +12,7 @@
 <body>
 <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-10" style="margin: auto">
-        <header style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.1)">
+        <header>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin: auto">
                     <nav class="navbar navbar-expand-lg navbar-light bg-white">
@@ -51,7 +51,7 @@
                     <nav class="navbar navbar-expand-md" style="flex: none; width: 100%; padding: 0">
                         <div class="main-nav">
                             <a class="navbar-brand" href="#">
-                                <img style="width: 200px" src="/media/Portfolio_files/logo.png" alt=""/>
+                                <img style="width: 200px" src="https://matataportfoliostorage.blob.core.windows.net/media/Portfolio_files/logo.png" alt=""/>
                             </a>
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#navbarCollapse" style="color: white">
@@ -74,7 +74,8 @@
                                 </ul>
                                 
                                    
-                                    <a href="/media/Portfolio_files/Resume.pdf" style="padding: 5px 10px;text-decoration: none;border: 2px solid white;border-radius: 3px;display: flex;flex-direction: row;justify-content: center;align-items: center;color: white" download>
+                                    <a href="https://matataportfoliostorage.blob.core.windows.net/media/Portfolio_files/Resume.pdf
+" style="padding: 5px 10px;text-decoration: none;border: 2px solid white;border-radius: 3px;display: flex;flex-direction: row;justify-content: center;align-items: center;color: white" download>
                                         <i class="bi bi-download"></i> Resume
                                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5l-4 5l-4-5m9 8h.01"/></svg>
                                     </a>
@@ -86,13 +87,13 @@
                                 <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
                                     <h6 class="card-title" style="text-align: center">+254743113141</h6>
                                     <div>
-                                        <a href="https://github.com/JamesMatata">
+                                        <a href="https://github.com/JamesMatata" style="text-decoration: none">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="margin-right: 5px"
                                              fill="black" class="bi bi-github" viewBox="0 0 16 16">
                                             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"></path>
                                         </svg>
                                         </a>
-                                        <a href="mailto:jamesmatatamule@gmail.com">
+                                        <a href="mailto:jamesmatatamule@gmail.com" style="text-decoration: none">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black"
                                              class="bi bi-envelope" viewBox="0 0 16 16">
                                             <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"></path>
@@ -101,15 +102,15 @@
                                     </div>
                                 </div>
         
-                                <hr/>
+                                <hr style="margin: 5px"/>
                                 <ul>
                                     <li id="nav-home-item"><a href="{% url 'core:home' %}" class="dropdown-item">Home</a></li>
                                     <li id="nav-portfolio-item"><a href="{% url 'core:portfolio' %}" class="dropdown-item">Portfolio</a></li>
                                     <li id="nav-contact-item"><a href="{% url 'core:contact' %}" class="dropdown-item">Contact</a></li>
         
                                 </ul>
-                                <hr/>
-                                <a href="/media/Portfolio_files/Resume.pdf" class="dropdown-item"
+                                <hr style="margin: 5px"/>
+                                <a href="https://matataportfoliostorage.blob.core.windows.net/media/Portfolio_files/Resume.pdf" class="dropdown-item"
                                    style="text-align: center; margin-bottom: 10px; text-decoration: underline; color: purple;" download>Download
                                     Resume</a>
                             </div>
